@@ -1,0 +1,8 @@
+{
+    "name": "tencentcloud-base-plugin",
+    "origin-plugin-dev-name": "tencentcloud-plugin-scf-template",
+    "origin-plugin-version": "1.3.8",
+    "plugin-dev-name": "tencentcloud-plugin-scf-template",
+    "plugin-version": "1.3.8",
+    "description": ""
+}

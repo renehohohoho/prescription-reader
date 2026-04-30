@@ -1,0 +1,17 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "處方辨識助手"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "處方辨識助手",
+		"navigationBarBackgroundColor": "#ffffff",
+		"backgroundColor": "#f0f2f5"
+	},
+	"uniIdRouter": {}
+}

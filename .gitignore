@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pth
+*.tar
+*.zip
+.env
+.venv
+venv/
+
+# Saved models & datasets
+OCR train/saved_models/
+OCR train/data_lmdb_release/
+OCR train/image_release/
+OCR train/result/
+*.mdb
+
+# UniApp build output
+lastone/last_one/unpackage/
+lastone/last_one/node_modules/
+
+# Credentials (never commit real keys)
+lastone/last_one/config.js
+lastone/last_one/uniCloud-tcb/cloudfunctions/tencentcloud-plugin/config.js
+
+# OS
+.DS_Store
+Thumbs.db
+*.lnk
