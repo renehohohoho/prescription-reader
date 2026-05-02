@@ -1,5 +1,3 @@
-create_dataset.py """
-
 import fire
 import os
 import lmdb

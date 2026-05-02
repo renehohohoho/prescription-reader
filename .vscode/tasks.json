@@ -1,0 +1,30 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Push prescription-reader fixes",
+			"type": "shell",
+			"command": "git add . && git commit -m \"Fix syntax error in create_lmdb_dataset.py - remove invalid string literal\" && git push"
+		},
+		{
+			"label": "Push prescription-reader fixes",
+			"type": "shell",
+			"command": "git add . && git commit -m \"Fix syntax error in create_lmdb_dataset.py - remove invalid string literal\" && git push"
+		},
+		{
+			"label": "Stage changes in prescription-reader",
+			"type": "shell",
+			"command": "git add ."
+		},
+		{
+			"label": "Push prescription-reader",
+			"type": "shell",
+			"command": "git add . && git commit -m \"Fix syntax error in create_lmdb_dataset.py - remove invalid string literal\" && git push"
+		},
+		{
+			"label": "Check git status",
+			"type": "shell",
+			"command": "git status"
+		}
+	]
+}
