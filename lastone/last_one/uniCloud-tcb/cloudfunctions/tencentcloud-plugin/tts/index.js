@@ -19,14 +19,14 @@
 const { request } = require('./utils');
 
 /**
- * 获取基础语音合成结果
- * 更多信息请访问 https://cloud.tencent.com/document/product/1073/37995
- * @param {object} params - 参数包装对象
- * @param {object} param - 语音合成接口相关参数
- * @return {Promise<object>} 评测信息
+ * 取得基礎語音合成結果
+ * 更多資訊請訪問 https://cloud.tencent.com/document/product/1073/37995
+ * @param {object} params - 參數包裝物件
+ * @param {object} param - 語音合成介面相關參數
+ * @return {Promise<object>} 合成結果
  */
 async function getTtsResult({ param }) {
-  // 调用腾讯云基础语音合成接口
+  // 呼叫騰訊雲基礎語音合成介面
   const result = await request('TextToVoice', param);
 
   return result;

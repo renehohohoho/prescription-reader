@@ -19,47 +19,47 @@
 const crypto = require('crypto');
 
 /**
- * 插件模块使用情况统计
- * @param {object} event - 通过uniCloud.callFunction调用云函数时传入的data对象
+ * 插件模組使用情況統計
+ * @param {object} event - 透過uniCloud.callFunction呼叫雲端函式時傳入的data物件
  * @param {string} event.secretId - 配置的secretId
  * @param {string} event.secretKey - 配置的secretKey
- * @param {string} event.module - 模块名称
- * @param {object} event.extraInfo - 附加信息
+ * @param {string} event.module - 模組名稱
+ * @param {object} event.extraInfo - 附加資訊
  * @return {Promise<void>}
  */
 exports.main = async ({ secretId, secretKey, module, extraInfo }) => {
   if (!secretId || !secretKey || !module) {
-    throw new Error('secretId,secretKey和module不能为空');
+    throw new Error('secretId、secretKey 及 module 不得為空');
   }
   const db = uniCloud.database();
-  // 暂时未在DCloud找到“判断表是否存在”的API，故每次都调用createCollection
+  // 暫時未在 DCloud 找到「判斷資料表是否存在」的 API，故每次都呼叫 createCollection
   try {
     await db.createCollection('tencentcloud_plugin_report');
   } catch (error) {
     if (/DATABASE_COLLECTION_ALREADY_EXIST/.test(error.message)) {
-      // 如果发现表已存在，则忽略错误，继续向下执行
+      // 若發現資料表已存在，則忽略錯誤，繼續向下執行
     } else {
-      // 其它错误，包括但不限于（阿里云不支持代码自动创建表，暂不统计），直接抛出异常
+      // 其他錯誤，包含但不限於（阿里雲不支援程式碼自動建立資料表，暫不統計），直接拋出例外
       throw error;
     }
   }
   const collection = db.collection('tencentcloud_plugin_report');
-  // 查找出第一条记录
+  // 查找第一筆記錄
   let {
     data: [record]
   } = await collection.limit(1).get();
-  // 如果为空则创建一条记录，该记录的主键_id作为数据上报的siteId使用，不同模块的上报共用一个siteId
+  // 若為空則建立一筆記錄，該記錄的主鍵 _id 作為資料上報的 siteId 使用，不同模組的上報共用同一個 siteId
   if (!record) {
     const { id } = await collection.add({});
     record = { _id: id };
   }
-  // 如果module已存在，说明已经上报过，直接返回
+  // 若 module 已存在，代表已上報過，直接返回
   if (record[module]) {
     return;
   }
-  // 获取UserUin
+  // 取得 UserUin
   const userUin = await getUserUin(secretId, secretKey);
-  // 调用上报接口，此接口不返回上报状态
+  // 呼叫上報介面，此介面不返回上報狀態
   await uniCloud.httpclient.request('https://appdata.qq.com/upload', {
     method: 'POST',
     headers: {
@@ -78,19 +78,19 @@ exports.main = async ({ secretId, secretKey, module, extraInfo }) => {
       }
     }
   });
-  // 保存上报标识，之后不再上报
+  // 儲存上報標識，之後不再上報
   await collection.doc(record._id).update({
     [module]: JSON.stringify(extraInfo)
   });
 };
 
-// 获取UserUin
+// 取得 UserUin
 async function getUserUin(secretId, secretKey) {
   const payloadHash = crypto.createHash('sha256').update('{}').digest('hex');
   const requestString = `POST\n/\n\ncontent-type:application/json\nhost:ms.tencentcloudapi.com\n\ncontent-type;host\n${payloadHash}`;
   const currentDate = new Date();
   const timestamp = `${Math.floor(currentDate.getTime() / 1000)}`;
-  const dateString = currentDate.toISOString().substr(0, 10);
+  const dateString = currentDate.toISOString().slice(0, 10);
   const requestStringHash = crypto.createHash('sha256').update(requestString).digest('hex');
   const stringToSign = `TC3-HMAC-SHA256\n${timestamp}\n${dateString}/ms/tc3_request\n${requestStringHash}`;
   const secretDate = crypto.createHmac('sha256', `TC3${secretKey}`).update(dateString).digest();
@@ -112,7 +112,10 @@ async function getUserUin(secretId, secretKey) {
   });
   const { status, statusMessage, data } = res;
   if (status !== 200) {
-    throw new Error('获取UserUin失败');
+    throw new Error('取得 UserUin 失敗');
+  }
+  if (!data || !data.Response) {
+    throw new Error('取得 UserUin 失敗：API 回傳格式異常');
   }
   if (data.Response.Error) {
     throw new Error(data.Response.Error.Message);

@@ -16,11 +16,11 @@
             "autoclose" : true,
             "delay" : 0
         },
-        /* 模块配置 */
+        /* 模組設定 */
         "modules" : {},
-        /* 应用发布信息 */
+        /* 應用發佈資訊 */
         "distribute" : {
-            /* android打包配置 */
+            /* android打包設定 */
             "android" : {
                 "permissions" : [
                     "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
@@ -40,17 +40,17 @@
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
                 ]
             },
-            /* ios打包配置 */
+            /* ios打包設定 */
             "ios" : {
                 "dSYMs" : false
             },
-            /* SDK配置 */
+            /* SDK設定 */
             "sdkConfigs" : {}
         }
     },
-    /* 快应用特有相关 */
+    /* 快應用特有相關 */
     "quickapp" : {},
-    /* 小程序特有相关 */
+    /* 小程式特有相關 */
     "mp-weixin" : {
         "appid" : "",
         "setting" : {

@@ -15,12 +15,12 @@
  */
 
 /**
- * 通用文字-通用手写体识别 https://cloud.tencent.com/document/product/866/36212
- * @param {object} params - 参数包装对象
- * @param {string} params.imageBase64 - 需要识别图片的base64编码
- * @param {string} params.imageUrl - 需要识别图片的url
- * @param {string} [params.Scene] - 场景字段，默认不用填写。可选值:only_hw 表示只输出手写体识别结果，过滤印刷体。
- * @returns {Promise<object>} - 检测到的通用文字信息
+ * 通用文字-通用手寫體識別 https://cloud.tencent.com/document/product/866/36212
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.imageBase64 - 需要識別圖片的base64編碼
+ * @param {string} params.imageUrl - 需要識別圖片的url
+ * @param {string} [params.Scene] - 場景欄位，預設不必填寫。可選值:only_hw 表示只輸出手寫體識別結果，過濾印刷體。
+ * @returns {Promise<object>} - 檢測到的通用文字資訊
  */
 import ocr from "./api.js";
 export default function generalHandwritingOCR({ imageBase64, imageUrl }) {

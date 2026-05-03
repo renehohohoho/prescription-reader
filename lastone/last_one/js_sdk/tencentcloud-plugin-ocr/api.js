@@ -16,9 +16,9 @@
 
 function ocr() {}
 
-// 参数首字母大写转换
+// 參數首字母大寫轉換
 function toUpperCase(obj) {
-  if (typeof obj === 'object') {
+  if (obj !== null && typeof obj === 'object') {
     const formatObj = Object.keys(obj).reduce((newObj, key) => {
       const newKey = key.substring(0, 1).toUpperCase() + key.substring(1);
       newObj[newKey] = obj[key];
@@ -26,19 +26,19 @@ function toUpperCase(obj) {
     }, {});
     return formatObj;
   }
-  throw new Error('参数需要为object类型');
+  throw new Error('參數需要為 object 型別');
 }
 
 function simpleOCR(name) {
-  if (!name) new Error('请传入OCR对应Action名称');
+  if (!name) throw new Error('請傳入 OCR 對應的 Action 名稱');
   return async function (args) {
     if (!args.imageBase64 && !args.imageUrl) {
-      throw new Error('请传入图片');
+      throw new Error('請傳入圖片');
     }
     try {
-      // 将参数key的首字母大写
+      // 將參數 key 的首字母大寫
       const payload = toUpperCase(args);
-      // 调用云函数来进行OCR识别
+      // 呼叫雲端函式進行 OCR 辨識
       const result = await uniCloud.callFunction({
         name: 'tencentcloud-plugin',
         data: {
@@ -50,13 +50,13 @@ function simpleOCR(name) {
       });
       return result;
     } catch (e) {
-      throw new Error(e);
+      throw e;
     }
   };
 }
 
 const function_names = [
-  // 通用文字识别
+  // 通用文字識別
   'GeneralBasicOCR',
   'GeneralAccurateOCR',
   'GeneralEfficientOCR',
@@ -65,14 +65,14 @@ const function_names = [
   'GeneralHandwritingOCR',
   'QrcodeOCR',
   'TextDetect',
-  // 行业文档识别
+  // 行業文件識別
   'TableOCR',
   'ArithmeticOCR',
   'FormulaOCR',
   'EduPaperOCR',
   'InsuranceBillOCR',
   'SealOCR',
-  // 卡证文字识别相关接口
+  // 卡證文字識別相關介面
   'MLIDPassportOCR',
   'MainlandPermitOCR',
   'HmtResidentPermitOCR',
@@ -88,7 +88,7 @@ const function_names = [
   'PassportOCR',
   'PermitOCR',
   'IDCardOCR',
-  // 票据单据
+  // 票據單據
   'VatInvoiceOCR',
   'WaybillOCR',
   'FinanBillSliceOCR',
@@ -106,7 +106,7 @@ const function_names = [
   'QuotaInvoiceOCR',
   'FlightInvoiceOCR',
   'CarInvoiceOCR',
-  // 汽车场景识别相关接口
+  // 汽車場景識別相關介面
   'VehicleLicenseOCR',
   'LicensePlateOCR',
   'DriverLicenseOCR',
@@ -114,7 +114,7 @@ const function_names = [
   'VehicleRegCertOCR'
 ];
 
-// 注册OCR函数
+// 註冊OCR函式
 for (let i = 0; i < function_names.length; i++) {
   const name = function_names[i];
   ocr[name.charAt(0).toLowerCase() + name.slice(1)] = simpleOCR(function_names[i]);

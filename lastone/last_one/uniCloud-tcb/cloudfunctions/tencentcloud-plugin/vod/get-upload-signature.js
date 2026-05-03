@@ -22,19 +22,19 @@ const { secretId, secretKey } = require('../config');
 const { uploadExpires } = require('./config');
 
 /**
- * 获取腾讯云云点播文件上传签名
- * 更多信息请访问 https://cloud.tencent.com/document/product/266/9221
- * @return {string} 云点播文件上传签名
+ * 取得騰訊雲雲點播檔案上傳簽名
+ * 更多資訊請訪問 https://cloud.tencent.com/document/product/266/9221
+ * @return {string} 雲點播檔案上傳簽名
  */
 function getUploadSignature() {
-  // 配置校验
+  // 設定校驗
   if (!secretId || !secretKey) {
-    throw new Error('请云函数配置文件中配置secretId和secretKey');
+    throw new Error('請在雲端函式設定檔中設定secretId和secretKey');
   }
   if (isNaN(uploadExpires) || uploadExpires <= 0) {
-    throw new Error('请在云函数VOD模块中配置有效的uploadExpires');
+    throw new Error('請在雲端函式VOD模組中設定有效的uploadExpires');
   }
-  // 生成签名信息
+  // 生成簽名資訊
   const current = Math.floor(new Date().getTime() / 1000);
   const args = {
     secretId,

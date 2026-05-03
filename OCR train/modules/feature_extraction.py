@@ -248,16 +248,16 @@ class ResNet(nn.Module):
 
 
 class MobileNetV3_FeatureExtractor(nn.Module):
-    """MobileNetV3特征提取器，适配OCR任务需求"""
-    
+    """MobileNetV3特徵提取器，適配OCR任務需求"""
+
     def __init__(self, input_channel=3, output_channel=512):
         super(MobileNetV3_FeatureExtractor, self).__init__()
-        
-        # 配置MobileNetV3 Large的基础结构（可根据需要切换为Small版本）
+
+        # 設定MobileNetV3 Large的基礎結構（可根據需要切換為Small版本）
         self.features = nn.Sequential(
-            # 初始卷积层
+            # 初始卷積層
             ConvBNReLU(input_channel, 16, 3, stride=2, activation='hswish'),
-            
+
             # Bottleneck序列
             InvertedResidual(16, 16, 3, stride=1, se_layer=None, activation='relu'),
             InvertedResidual(16, 24, 3, stride=2, se_layer=None, activation='relu'),
@@ -265,27 +265,27 @@ class MobileNetV3_FeatureExtractor(nn.Module):
             InvertedResidual(24, 40, 5, stride=2, se_layer=SELayer, activation='hswish'),
             InvertedResidual(40, 40, 5, stride=1, se_layer=SELayer, activation='hswish'),
             InvertedResidual(40, 40, 5, stride=1, se_layer=SELayer, activation='hswish'),
-            
-            # 后处理卷积层
+
+            # 後處理卷積層
             ConvBNReLU(40, 160, 1, stride=1, activation='hswish'),
-            
-            # 自适应深度特征处理（关键设计：保持空间维度）
-            nn.AdaptiveAvgPool2d((1, None)),  # 保持宽度维度
+
+            # 自適應深度特徵處理（關鍵設計：保持空間維度）
+            nn.AdaptiveAvgPool2d((1, None)),  # 保持寬度維度
             ConvBNReLU(160, output_channel, 1, stride=1, activation='hswish'),
-            
-            # 高度压缩层（将特征图高度压缩为1）
+
+            # 高度壓縮層（將特徵圖高度壓縮為1）
             nn.Conv2d(output_channel, output_channel, kernel_size=(1, 3), stride=1, padding=(0, 1), bias=False),
             nn.BatchNorm2d(output_channel),
             nn.Hardswish(inplace=True),
-            nn.MaxPool2d(kernel_size=(1, 2), stride=(1, 2))  # 最终输出[B, 512, 1, W/2]
+            nn.MaxPool2d(kernel_size=(1, 2), stride=(1, 2))  # 最終輸出[B, 512, 1, W/2]
         )
 
     def forward(self, x):
         return self.features(x)
 
-# 以下是MobileNetV3的组件定义-----------------------------------------------
+# 以下是MobileNetV3的元件定義-----------------------------------------------
 class SELayer(nn.Module):
-    """Squeeze-and-Excitation模块"""
+    """Squeeze-and-Excitation模組"""
     def __init__(self, channel, reduction=4):
         super(SELayer, self).__init__()
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
@@ -303,7 +303,7 @@ class SELayer(nn.Module):
         return x * y
 
 class ConvBNReLU(nn.Sequential):
-    """卷积+BN+激活函数组合"""
+    """卷積+BN+激活函數組合"""
     def __init__(self, in_planes, out_planes, kernel_size=3, stride=1, 
                  groups=1, activation='relu'):
         padding = (kernel_size - 1) // 2
@@ -319,31 +319,31 @@ class ConvBNReLU(nn.Sequential):
         super(ConvBNReLU, self).__init__(*layers)
 
 class InvertedResidual(nn.Module):
-    """倒残差结构"""
+    """倒殘差結構"""
     def __init__(self, inp, oup, kernel_size, stride, se_layer, activation='relu'):
         super(InvertedResidual, self).__init__()
         assert stride in [1, 2]
         self.use_res_connect = stride == 1 and inp == oup
-        
+
         layers = []
-        expand_ratio = 4  # 扩展比例（Large版本典型值）
+        expand_ratio = 4  # 擴展比例（Large版本典型值）
         hidden_dim = int(round(inp * expand_ratio))
-        
-        # 扩展阶段
+
+        # 擴展階段
         if expand_ratio != 1:
-            layers.append(ConvBNReLU(inp, hidden_dim, kernel_size=1, 
-                                   activation=activation))
-        
-        # 深度卷积
+            layers.append(ConvBNReLU(inp, hidden_dim, kernel_size=1,
+                                     activation=activation))
+
+        # 深度卷積
         layers.append(ConvBNReLU(
             hidden_dim, hidden_dim, kernel_size=kernel_size, stride=stride,
             groups=hidden_dim, activation=activation))
-        
+
         # Squeeze-and-Excite
         if se_layer is not None:
             layers.append(se_layer(hidden_dim))
-        
-        # 投影层
+
+        # 投影層
         layers.append(nn.Conv2d(hidden_dim, oup, 1, 1, 0, bias=False))
         layers.append(nn.BatchNorm2d(oup))
         

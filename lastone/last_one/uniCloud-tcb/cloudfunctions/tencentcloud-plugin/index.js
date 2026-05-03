@@ -37,10 +37,10 @@ const modules = {
 };
 
 /**
- * 腾讯云uni-app插件依赖的云函数入口
- * @param {object} event - 通过uniCloud.callFunction调用云函数时传入的data对象
- * @param {string} event.module - 云函数模块（目前仅支付传入"COS"），必传参数
- * @param {string} event.action - 云函数模块下的方法名，必传参数
+ * 騰訊雲uni-app插件依賴的雲端函式入口
+ * @param {object} event - 透過uniCloud.callFunction呼叫雲端函式時傳入的data物件
+ * @param {string} event.module - 雲端函式模組（目前僅支援傳入"COS"），必傳參數
+ * @param {string} event.action - 雲端函式模組下的方法名，必傳參數
  * @return {Promise<any>}
  */
 exports.main = async (event) => {
@@ -48,11 +48,11 @@ exports.main = async (event) => {
   if (!modules[module] || !modules[module][action]) {
     throw new Error(`${module}.${action}不存在`);
   }
-  // 数据统计
+  // 資料統計
   const getExtraInfoMethod = modules[module].getExtraReportInfo;
   const extraInfo = getExtraInfoMethod ? getExtraInfoMethod() : {};
   report(module, extraInfo);
-  // 调用相应的模块
+  // 呼叫相應的模組
   const result = await modules[module][action](params);
   return result;
 };

@@ -21,14 +21,14 @@ const { region } = require('./config');
 const { sign } = require('../common');
 
 /**
- * 请求腾讯云基础语音合成公共方法
- * @param {string} action - 接口请求action
- * @param {object} payload - 接口请求体
- * @returns {object} API返回的有效数据
+ * 請求騰訊雲基礎語音合成公共方法
+ * @param {string} action - 介面請求action
+ * @param {object} payload - 介面請求體
+ * @returns {object} API回傳的有效資料
  */
 async function request(action, payload) {
   if (!region) {
-    throw new Error('请在云函数TTS模块中配置region');
+    throw new Error('請在雲端函式TTS模組中設定region');
   }
   const [timestamp, authorization] = sign('tts', JSON.stringify(payload));
   const options = {
@@ -47,7 +47,10 @@ async function request(action, payload) {
   const response = await axios(options);
   const { status, statusText, data } = response;
   if (status !== 200) {
-    throw new Error(`${action}接口调用失败[${status} - ${statusText}]`);
+    throw new Error(`${action} 介面呼叫失敗 [${status} - ${statusText}]`);
+  }
+  if (!data || !data.Response) {
+    throw new Error(`${action} API 回傳格式異常`);
   }
   if (data.Response.Error) {
     throw new Error(data.Response.Error.Message);

@@ -20,24 +20,24 @@ const crypto = require('crypto');
 const { antiTheftKey, antiTheftExpires } = require('./config');
 
 /**
- * 获取云点播文件防盗链链接
- * 更多信息请访问 https://cloud.tencent.com/document/product/266/14047
- * @param {object} params - 参数包装对象
- * @param {string} params.mediaUrl - 云点播文件地址
- * @return {string} 云点播文件完整url（包含签名）
+ * 取得雲點播檔案防盜鏈連結
+ * 更多資訊請訪問 https://cloud.tencent.com/document/product/266/14047
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.mediaUrl - 雲點播檔案地址
+ * @return {string} 雲點播檔案完整url（包含簽名）
  */
 function getAntiTheftURL({ mediaUrl }) {
-  // 配置校验
+  // 設定校驗
   if (!antiTheftKey) {
-    throw new Error('请在云函数VOD模块中配置有效的antiTheftKey');
+    throw new Error('請在雲端函式VOD模組中設定有效的antiTheftKey');
   }
   if (isNaN(antiTheftExpires) || antiTheftExpires <= 0) {
-    throw new Error('请在云函数VOD模块中配置有效的antiTheftExpires');
+    throw new Error('請在雲端函式VOD模組中設定有效的antiTheftExpires');
   }
-  // 生成包含签名的url
+  // 生成包含簽名的url
   const result = new RegExp('^https?://[^/]*(.*/)[^/]*$').exec(mediaUrl);
   if (!result) {
-    throw new Error('无效的媒体文件Url');
+    throw new Error('無效的媒體檔案Url');
   }
   const dir = result[1];
   const t = Math.floor(new Date().getTime() / 1000 + antiTheftExpires * 60).toString(16);

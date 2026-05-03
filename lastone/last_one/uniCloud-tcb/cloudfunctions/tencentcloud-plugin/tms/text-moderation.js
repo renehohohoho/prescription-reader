@@ -19,17 +19,17 @@
 const { request } = require('./utils');
 
 /**
- * 文本内容检测
- * 更多信息请访问 https://cloud.tencent.com/document/product/669/34502
- * @param {object} params - 参数包装对象
- * @param {string} params.content - 需要识别的文本内容
- * @return {Promise<object>} 识别结果
+ * 文字內容檢測
+ * 更多資訊請訪問 https://cloud.tencent.com/document/product/669/34502
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.content - 需要識別的文字內容
+ * @return {Promise<object>} 識別結果
  */
 async function textModeration({ content }) {
   if (!content) {
-    throw new Error('文本内容不能为空');
+    throw new Error('文字內容不得為空');
   }
-  // 调用腾讯云查询接口
+  // 呼叫騰訊雲查詢介面
   const { Data } = await request('TextModeration', {
     Content: Buffer.from(content).toString('base64')
   });

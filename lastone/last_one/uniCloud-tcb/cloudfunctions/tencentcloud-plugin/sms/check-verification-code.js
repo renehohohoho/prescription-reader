@@ -19,47 +19,47 @@
 const { verificationCodeCollection, verificationCodeExpires, verificationCodeCheckTimes } = require('./config');
 
 /**
- * 校验验证码是否正确
+ * 校驗驗證碼是否正確
  * @async
- * @param {object} params - 参数包装对象
- * @param {string} params.phoneNumber - 手机号码
- * @param {string} params.verificationCode - 用户输入的验证码
- * @return {Promise<void>} 验证码核验状态（无异常代表正确）
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.phoneNumber - 手機號碼
+ * @param {string} params.verificationCode - 使用者輸入的驗證碼
+ * @return {Promise<void>} 驗證碼核驗狀態（無異常代表正確）
  */
 async function checkVerificationCode({ phoneNumber, verificationCode }) {
-  // 配置校验
+  // 設定校驗
   if (!verificationCodeCollection) {
-    throw new Error('请在云函数SMS模块中配置verificationCodeCollection');
+    throw new Error('請在雲端函式SMS模組中設定verificationCodeCollection');
   }
   if (!verificationCodeExpires || isNaN(verificationCodeExpires) || verificationCodeExpires <= 0) {
-    throw new Error('请在云函数SMS模块中配置有效的verificationCodeExpires');
+    throw new Error('請在雲端函式SMS模組中設定有效的verificationCodeExpires');
   }
   if (!verificationCodeCheckTimes || isNaN(verificationCodeCheckTimes) || verificationCodeCheckTimes <= 0) {
-    throw new Error('请在云函数SMS模块中配置有效的verificationCodeCheckTimes');
+    throw new Error('請在雲端函式SMS模組中設定有效的verificationCodeCheckTimes');
   }
-  // 参数校验
+  // 參數校驗
   if (!phoneNumber) {
-    throw new Error('手机号码不能为空');
+    throw new Error('手機號碼不得為空');
   }
   if (!verificationCode) {
-    throw new Error('验证码不能为空');
+    throw new Error('驗證碼不得為空');
   }
-  // 自动为无前缀手机号码添加+86前缀
+  // 自動為無前綴手機號碼添加+86前綴
   if (!phoneNumber.startsWith('+')) {
     phoneNumber = `+86${phoneNumber}`;
   }
   const db = uniCloud.database();
   const verificationCodes = db.collection(verificationCodeCollection);
-  // 清理过期验证码记录
+  // 清理過期驗證碼記錄
   const result = await verificationCodes
     .where({
       createTime: db.command.lt(new Date().getTime() - verificationCodeExpires * 60 * 1000)
     })
     .remove();
   if (result.deleted) {
-    console.log(`已自动清理掉${result.deleted}条过期记录`);
+    console.log(`已自動清理掉${result.deleted}條過期記錄`);
   }
-  // 验证码查询并核对
+  // 驗證碼查詢並核對
   const {
     data: [record]
   } = await verificationCodes
@@ -70,20 +70,20 @@ async function checkVerificationCode({ phoneNumber, verificationCode }) {
     .limit(1)
     .get();
   if (!record) {
-    throw new Error('验证码不正确');
+    throw new Error('驗證碼不正確');
   }
-  // 每个验证码仅支持核验有限次数（防止字典遍历）
+  // 每個驗證碼僅支持核驗有限次數（防止字典遍歷）
   if (record.checkCounter >= verificationCodeCheckTimes) {
-    throw new Error('验证码不正确');
+    throw new Error('驗證碼不正確');
   }
-  // 增加验证码核验次数
+  // 增加驗證碼核驗次數
   if (record.verificationCode !== verificationCode) {
     await verificationCodes.doc(record._id).update({
       checkCounter: record.checkCounter + 1
     });
-    throw new Error('验证码不正确');
+    throw new Error('驗證碼不正確');
   }
-  // 验证成功后异步删除验证码记录
+  // 驗證成功後非同步刪除驗證碼記錄
   try {
     verificationCodes
       .where({

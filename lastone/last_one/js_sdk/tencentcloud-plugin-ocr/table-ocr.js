@@ -16,11 +16,11 @@
 
 import ocr from "./api.js";
 /**
- * 行业文档-表格识别 https://cloud.tencent.com/document/product/866/34936
- * @param {object} params - 参数包装对象
- * @param {string} params.imageBase64 需要识别图片的base64编码
- * @param {string} params.imageUrl 需要识别图片的url
- * @returns {Promise<object>} TextDetections -检测到的文本信息 Data -Base64编码后的Excel数据。
+ * 行業文件-表格識別 https://cloud.tencent.com/document/product/866/34936
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.imageBase64 需要識別圖片的base64編碼
+ * @param {string} params.imageUrl 需要識別圖片的url
+ * @returns {Promise<object>} TextDetections -檢測到的文字資訊 Data -Base64編碼後的Excel資料。
  */
 export default function tableOCR({ imageBase64, imageUrl }) {
   return ocr.tableOCR({ imageBase64, imageUrl })

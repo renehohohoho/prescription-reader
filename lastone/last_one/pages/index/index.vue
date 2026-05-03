@@ -79,7 +79,8 @@ export default {
       try {
         ({ filePath, base64 } = await this.chooseImageToBase64());
       } catch (err) {
-        // User cancelled — no toast needed
+        if (err && err.message === 'cancelled') return;
+        uni.showToast({ title: (err && err.message) || '選取圖片失敗', icon: 'none', duration: 3000 });
         return;
       }
 
@@ -116,12 +117,13 @@ export default {
         uni.request({
           url: 'https://api.deepseek.com/chat/completions',
           method: 'POST',
+          timeout: 60000,
           header: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${config.deepseekApiKey}`
           },
           data: {
-            model: 'deepseek-reasoner',
+            model: 'deepseek-chat',
             messages: [
               {
                 role: 'system',
@@ -146,7 +148,12 @@ export default {
           },
           success: (res) => {
             if (res.statusCode === 200) {
-              this.deepSeekResult = res.data.choices[0].message.content;
+              const content = res.data?.choices?.[0]?.message?.content;
+              if (!content) {
+                reject(new Error('DeepSeek API 回傳格式異常'));
+                return;
+              }
+              this.deepSeekResult = content;
               resolve(this.deepSeekResult);
             } else {
               reject(new Error(`DeepSeek API 錯誤（${res.statusCode}）`));
@@ -189,7 +196,11 @@ export default {
             if (typeof plus !== 'undefined') {
               readFile();
             } else {
-              document.addEventListener('plusready', readFile, false);
+              const onPlusReady = () => {
+                document.removeEventListener('plusready', onPlusReady, false);
+                readFile();
+              };
+              document.addEventListener('plusready', onPlusReady, false);
             }
             // #endif
 
@@ -197,7 +208,14 @@ export default {
             reject(new Error('僅支援 App 平台'));
             // #endif
           },
-          fail: () => reject(new Error('cancelled'))
+          fail: (err) => {
+            const msg = (err && err.errMsg) || '';
+            if (msg.toLowerCase().includes('cancel')) {
+              reject(new Error('cancelled'));
+            } else {
+              reject(new Error(msg || '選取圖片失敗'));
+            }
+          }
         });
       });
     }

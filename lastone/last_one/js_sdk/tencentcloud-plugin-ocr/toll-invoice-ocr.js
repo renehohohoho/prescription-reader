@@ -15,11 +15,11 @@
  */
 
 /**
- * 票据单据-过路过桥费发票识别 https://cloud.tencent.com/document/product/866/37833
- * @param {object} params - 参数包装对象
- * @param {string} params.imageBase64 需要识别图片的base64编码
- * @param {string} params.imageUrl 需要识别图片的url
- * @returns {Promise<object>} - 检测到的票据信息
+ * 票據單據-過路過橋費發票識別 https://cloud.tencent.com/document/product/866/37833
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.imageBase64 需要識別圖片的base64編碼
+ * @param {string} params.imageUrl 需要識別圖片的url
+ * @returns {Promise<object>} - 檢測到的票據資訊
  */
 import ocr from "./api.js";
 export default function tollInvoiceOCR({ imageBase64, imageUrl }) {

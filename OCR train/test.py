@@ -1,4 +1,5 @@
 import os
+import shutil
 import time
 import string
 import argparse
@@ -85,6 +86,9 @@ def validation(model, criterion, evaluation_loader, converter, opt):
     length_of_data = 0
     infer_time = 0
     valid_loss_avg = Averager()
+    preds_str = []
+    labels = []
+    confidence_score_list = []
 
     for i, (image_tensors, labels) in enumerate(evaluation_loader):
         batch_size = image_tensors.size(0)
@@ -136,7 +140,6 @@ def validation(model, criterion, evaluation_loader, converter, opt):
         # calculate accuracy & confidence score
         preds_prob = F.softmax(preds, dim=2)
         preds_max_prob, _ = preds_prob.max(dim=2)
-        confidence_score_list = []
         for gt, pred, pred_max_prob in zip(labels, preds_str, preds_max_prob):
             if 'Attn' in opt.Prediction:
                 gt = gt[:gt.find('[s]')]
@@ -176,10 +179,13 @@ def validation(model, criterion, evaluation_loader, converter, opt):
             # calculate confidence score (= multiply of pred_max_prob)
             try:
                 confidence_score = pred_max_prob.cumprod(dim=0)[-1]
-            except:
+            except Exception:
                 confidence_score = 0  # for empty pred case, when prune after "end of sentence" token ([s])
             confidence_score_list.append(confidence_score)
             # print(pred, gt, pred==gt, confidence_score)
+
+    if length_of_data == 0:
+        return valid_loss_avg.val(), 0.0, 0.0, preds_str, confidence_score_list, labels, infer_time, length_of_data
 
     accuracy = n_correct / float(length_of_data) * 100
     norm_ED = norm_ED / float(length_of_data)  # ICDAR2019 Normalized Edit Distance
@@ -211,7 +217,7 @@ def test(opt):
 
     """ keep evaluation model and result logs """
     os.makedirs(f'./result/{opt.exp_name}', exist_ok=True)
-    os.system(f'cp {opt.saved_model} ./result/{opt.exp_name}/')
+    shutil.copy2(opt.saved_model, f'./result/{opt.exp_name}/')
 
     """ setup loss """
     if 'CTC' in opt.Prediction:

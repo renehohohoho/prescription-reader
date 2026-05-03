@@ -20,24 +20,24 @@ const crypto = require('crypto');
 const { secretId, secretKey, isReport } = require('./config');
 
 /**
- * 获取腾讯云API签名方法V3
- * @param {string} servicename - 服务名称，例如：ocr、sms等
- * @param {string} payload - 接口请求正文
- * @return {string[]} 返回API请求接口headers所需要的认证信息
+ * 取得騰訊雲 API 簽名方法 V3
+ * @param {string} servicename - 服務名稱，例如：ocr、sms 等
+ * @param {string} payload - 介面請求正文
+ * @return {string[]} 回傳 API 請求介面 headers 所需的驗證資訊
  */
 function sign(servicename, payload) {
-  // 配置校验
+  // 設定校驗
   if (!secretId || !secretKey) {
-    throw new Error('请检查云函数密钥配置文件!');
+    throw new Error('請檢查雲端函式金鑰設定檔！');
   }
   if (!servicename) {
-    throw new Error('请填写服务名称');
+    throw new Error('請填寫服務名稱');
   }
   const payloadHash = crypto.createHash('sha256').update(payload).digest('hex');
   const requestString = `POST\n/\n\ncontent-type:application/json\nhost:${servicename}.tencentcloudapi.com\n\ncontent-type;host\n${payloadHash}`;
   const currentDate = new Date();
   const timestamp = `${Math.floor(currentDate.getTime() / 1000)}`;
-  const dateString = currentDate.toISOString().substr(0, 10);
+  const dateString = currentDate.toISOString().slice(0, 10);
   const requestStringHash = crypto.createHash('sha256').update(requestString).digest('hex');
   const stringToSign = `TC3-HMAC-SHA256\n${timestamp}\n${dateString}/${servicename}/tc3_request\n${requestStringHash}`;
   const secretDate = crypto.createHmac('sha256', `TC3${secretKey}`).update(dateString).digest();
@@ -51,9 +51,9 @@ function sign(servicename, payload) {
 }
 
 /**
- * 插件使用统计，异步处理，忽略结果，不阻塞主流程
- * @param {string} module - 模块名称
- * @param {object} extraInfo - 附加信息
+ * 外掛程式使用統計，非同步處理，忽略結果，不阻塞主流程
+ * @param {string} module - 模組名稱
+ * @param {object} extraInfo - 附加資訊
  */
 function report(module, extraInfo) {
   if (!isReport) {

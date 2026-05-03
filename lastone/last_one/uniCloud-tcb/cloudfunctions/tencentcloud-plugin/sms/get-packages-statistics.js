@@ -20,17 +20,17 @@ const { request } = require('./utils');
 const { appId } = require('./config');
 
 /**
- * 获取腾讯云SMS产品套餐包状态
- * @param {object} params - 参数包装对象
- * @param {number} params.limit - 最大上限(需要拉取的套餐包个数)
- * @return {Promise<object>} 短信套餐包状态信息，详见文档 https://cloud.tencent.com/document/api/382/39533
+ * 取得騰訊雲SMS產品套餐包狀態
+ * @param {object} params - 參數包裝物件
+ * @param {number} params.limit - 最大上限（需要拉取的套餐包個數）
+ * @return {Promise<object>} 短訊套餐包狀態資訊，詳見文件 https://cloud.tencent.com/document/api/382/39533
  */
 async function getPackagesStatistics({ limit = 10 }) {
-  // 配置校验
+  // 設定校驗
   if (!appId) {
-    throw new Error('请在云函数SMS模块中配置appId');
+    throw new Error('請在雲端函式SMS模組中設定appId');
   }
-  // 调用腾讯云查询SMS状态接口
+  // 呼叫騰訊雲查詢SMS狀態介面
   const result = await request('SmsPackagesStatistics', {
     SmsSdkAppid: appId,
     Limit: limit,

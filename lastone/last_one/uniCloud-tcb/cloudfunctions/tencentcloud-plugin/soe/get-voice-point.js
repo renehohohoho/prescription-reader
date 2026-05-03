@@ -19,9 +19,9 @@
 const { request } = require('./utils');
 
 /**
- * 获取参数
- * @param {object} param - 待包装对象
- * @return {object} 包装参数对象
+ * 取得參數
+ * @param {object} param - 待包裝物件
+ * @return {object} 包裝參數物件
  */
 function getParams(param) {
   const paramsData = {
@@ -37,7 +37,7 @@ function getParams(param) {
     ScoreCoeff: param.scoreCoeff
   };
 
-  // 非必填参数
+  // 非必填參數
   param.hasOwnProperty('soeAppId') && (paramsData.SoeAppId = param.soeAppId);
   param.hasOwnProperty('storageMode') && (paramsData.StorageMode = param.storageMode);
   param.hasOwnProperty('sentenceInfoEnabled') && (paramsData.SentenceInfoEnabled = param.sentenceInfoEnabled);
@@ -48,16 +48,16 @@ function getParams(param) {
 }
 
 /**
- * 获取口语评测信息
- * 更多信息请访问 https://cloud.tencent.com/document/api/884/32605
- * @param {object} params - 参数包装对象
- * @param {object} params.param - 口语评测相关参数
- * @return {Promise<object>} 评测信息
+ * 取得口語評測資訊
+ * 更多資訊請訪問 https://cloud.tencent.com/document/api/884/32605
+ * @param {object} params - 參數包裝物件
+ * @param {object} params.param - 口語評測相關參數
+ * @return {Promise<object>} 評測資訊
  */
 async function getVoicePoint({ param }) {
   const paramsData = getParams(param);
 
-  // 调用腾讯云发音数据传输接口附带初始化过程接口
+  // 呼叫騰訊雲發音資料傳輸介面（附帶初始化過程介面）
   const evaluateInfo = await request('TransmitOralProcessWithInit', paramsData);
 
   return evaluateInfo;

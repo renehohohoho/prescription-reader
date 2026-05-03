@@ -20,32 +20,32 @@ const sendSMS = require('./send-sms');
 const { verificationCodeCollection, verificationCodeTemplateId, verificationCodeLength } = require('./config');
 
 /**
- * 发送短信验证码
+ * 發送簡訊驗證碼
  * @async
- * @param {object} params - 参数包装对象
- * @param {string} params.phoneNumber - 手机号码
- * @return {Promise<void>} 验证码发送状态（无异常代表发送成功）
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.phoneNumber - 手機號碼
+ * @return {Promise<void>} 驗證碼發送狀態（無異常代表發送成功）
  */
 async function sendVerificationCode({ phoneNumber }) {
-  // 配置校验
+  // 設定校驗
   if (!verificationCodeCollection) {
-    throw new Error('请在云函数SMS模块中配置verificationCodeCollection');
+    throw new Error('請在雲端函式SMS模組中設定verificationCodeCollection');
   }
   if (!verificationCodeTemplateId) {
-    throw new Error('请在云函数SMS模块中配置verificationCodeTemplateId');
+    throw new Error('請在雲端函式SMS模組中設定verificationCodeTemplateId');
   }
   if (isNaN(verificationCodeLength) || verificationCodeLength < 4 || verificationCodeLength > 8) {
-    throw new Error('请在云函数SMS模块中配置有效的verificationCodeLength');
+    throw new Error('請在雲端函式SMS模組中設定有效的verificationCodeLength');
   }
-  // 参数校验
+  // 參數校驗
   if (!phoneNumber) {
-    throw new Error('手机号码不能为空');
+    throw new Error('手機號碼不得為空');
   }
-  // 自动为无前缀手机号码添加+86前缀
+  // 自動為無前綴手機號碼添加+86前綴
   if (!phoneNumber.startsWith('+')) {
     phoneNumber = `+86${phoneNumber}`;
   }
-  // 生成随机验证码并存入云数据库
+  // 生成隨機驗證碼並存入雲資料庫
   const verificationCode = `${Math.random()}`.substr(2, verificationCodeLength);
   const db = uniCloud.database();
   const verificationCodes = db.collection(verificationCodeCollection);
@@ -55,7 +55,7 @@ async function sendVerificationCode({ phoneNumber }) {
     createTime: new Date().getTime(),
     checkCounter: 0
   });
-  // 发送短信
+  // 發送簡訊
   const { SendStatusSet } = await sendSMS({
     phoneNumbers: [phoneNumber],
     templateId: verificationCodeTemplateId,

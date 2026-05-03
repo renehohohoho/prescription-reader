@@ -15,12 +15,12 @@
  */
 
 /**
- * 汽车场景-行驶证识别(默认为主页) https://cloud.tencent.com/document/product/866/36209
- * @param {object} params - 参数包装对象
- * @param {string} params.imageBase64 - 需要识别图片的base64编码
- * @param {string} params.imageUrl - 需要识别图片的url
- * @param {string} [params.cardSide] - FRONT 为行驶证主页正面（有红色印章的一面），BACK 为行驶证副页正面（有号码号牌的一面）。
- * @returns {Promise<object>}  - 汽车场景识别结果
+ * 汽車場景-行駛證識別（預設為主頁） https://cloud.tencent.com/document/product/866/36209
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.imageBase64 - 需要識別圖片的base64編碼
+ * @param {string} params.imageUrl - 需要識別圖片的url
+ * @param {string} [params.cardSide] - FRONT 為行駛證主頁正面（有紅色印章的一面），BACK 為行駛證副頁正面（有號碼號牌的一面）。
+ * @returns {Promise<object>}  - 汽車場景識別結果
  */
 import ocr from "./api.js";
 export default function vehicleLicenseOCR({ imageBase64, imageUrl, cardSide }) {

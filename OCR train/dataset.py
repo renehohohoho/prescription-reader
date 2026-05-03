@@ -1,5 +1,4 @@
 import os
-import sys
 import re
 import six
 import math
@@ -92,8 +91,8 @@ class Batch_Balanced_Dataset(object):
                 image, text = next(self.dataloader_iter_list[i])
                 balanced_batch_images.append(image)
                 balanced_batch_texts += text
-            except ValueError:
-                pass
+            except ValueError as e:
+                print(f'Skipping batch due to ValueError: {e}')
 
         balanced_batch_images = torch.cat(balanced_batch_images, 0)
 
@@ -134,8 +133,7 @@ class LmdbDataset(Dataset):
         self.opt = opt
         self.env = lmdb.open(root, max_readers=32, readonly=True, lock=False, readahead=False, meminit=False)
         if not self.env:
-            print('cannot create lmdb from %s' % (root))
-            sys.exit(0)
+            raise RuntimeError('cannot create lmdb from %s' % root)
 
         with self.env.begin(write=False) as txn:
             nSamples = int(txn.get('num-samples'.encode()))
@@ -179,7 +177,7 @@ class LmdbDataset(Dataset):
         return self.nSamples
 
     def __getitem__(self, index):
-        assert index <= len(self), 'index range error'
+        assert index < len(self), 'index range error'
         index = self.filtered_index_list[index]
 
         with self.env.begin(write=False) as txn:

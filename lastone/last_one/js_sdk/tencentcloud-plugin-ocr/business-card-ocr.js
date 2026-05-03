@@ -15,12 +15,12 @@
  */
 
 /**
- * 卡证文字-名片识别 https://cloud.tencent.com/document/product/866/36214
- * @param {object} params - 参数包装对象
- * @param {string} params.imageBase64 - 需要识别图片的base64编码
- * @param {string} params.imageUrl - 需要识别图片的url
- * @param {object} [params.config] - 可选字段，根据需要选择是否请求对应字段。目前支持的字段为：RetImageType-“PROPROCESS” 图像预处理，string 类型。Config = {"RetImageType":"PROPROCESS"}
- * @returns {Promise<object>} - 检测到的证件信息
+ * 卡證文字-名片識別 https://cloud.tencent.com/document/product/866/36214
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.imageBase64 - 需要識別圖片的base64編碼
+ * @param {string} params.imageUrl - 需要識別圖片的url
+ * @param {object} [params.config] - 可選欄位，根據需要選擇是否請求對應欄位。目前支援的欄位為：RetImageType-”PROPROCESS” 圖像預處理，string 類型。Config = {“RetImageType”:”PROPROCESS”}
+ * @returns {Promise<object>} - 檢測到的證件資訊
  */
 import ocr from "./api.js";
 export default function businessCardOCR({ imageBase64, imageUrl, config }) {

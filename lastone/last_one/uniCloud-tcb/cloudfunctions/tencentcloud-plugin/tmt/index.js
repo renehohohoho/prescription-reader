@@ -18,22 +18,18 @@
 const { request } = require('./utils.js');
 
 /**
- * 获取机器翻译结果
- * @param {object} params - 参数包装对象
- * @param {string} params.name - 机器翻译 API的Action值 https://cloud.tencent.com/document/product/551/15612
- * @param {object} params.payload - API需要的参数
- * @return {Promise<object>} API返回数据
+ * 取得機器翻譯結果
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.name - 機器翻譯 API的Action值 https://cloud.tencent.com/document/product/551/15612
+ * @param {object} params.payload - API所需的參數
+ * @return {Promise<object>} API回傳資料
  */
 async function getTmtResult(params) {
   if (!params.name) {
-    throw new Error('缺少API Action参数');
+    throw new Error('缺少 API Action 參數');
   }
-  try {
-    const result = await request(params.name, params.payload);
-    return result;
-  } catch (e) {
-    throw new Error(e);
-  }
+  const result = await request(params.name, params.payload);
+  return result;
 }
 
 module.exports = {

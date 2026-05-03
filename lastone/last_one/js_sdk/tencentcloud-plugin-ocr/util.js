@@ -15,9 +15,9 @@
  */
 
 /**
- * 将本地文件路径转为base64
- * @param {string} filePath 需要转换的文件的本地路径
- * @returns {Promise<object>} result // base64格式的音频
+ * 將本地檔案路徑轉為 base64
+ * @param {string} filePath 需要轉換的檔案的本地路徑
+ * @returns {Promise<object>} result // base64 格式的音訊
  */
 export async function filePath2Base64(filePath) {
   return new Promise((resolve, reject) => {
@@ -40,9 +40,9 @@ export async function filePath2Base64(filePath) {
 }
 
 /**
- * blob文件转换base64格式
- * @param {object} blob 需要转换的文件
- * @returns {Promise<string>} result // base64格式的音频
+ * blob檔案轉換base64格式
+ * @param {object} blob 需要轉換的檔案
+ * @returns {Promise<string>} result // base64格式的音訊
  */
 export async function blob2Base64(file) {
   return new Promise((resolve, reject) => {

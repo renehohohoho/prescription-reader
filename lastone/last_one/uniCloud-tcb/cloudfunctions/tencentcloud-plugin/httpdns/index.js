@@ -19,25 +19,25 @@ const crypto = require('crypto');
 const { encId, encKey } = require('./config.js');
 
 /**
- * 核查验证码票据结果
+ * 核查 DNS 解析結果
  * @param {*} params
- * @param {integer} params.domainName - 需要解析的域名
- * @param {string?} params.ip - 用户IP 默认取用户客户端ip
- * @param {number?} params.ttl - 是否递归服务器缓存时间 1：返回
- * @param {number?} params.clientip - 是否返回用户公网出口IP 1:返回
- * @param {boolean} param.isEnc - 是否加密 true(调用企业版API): 加密 false:不加密(调用免费版API)
+ * @param {integer} params.domainName - 需要解析的網域名稱
+ * @param {string?} params.ip - 使用者 IP，預設取用戶端 IP
+ * @param {number?} params.ttl - 是否遞迴伺服器快取時間 1：回傳
+ * @param {number?} params.clientip - 是否回傳使用者公網出口 IP 1：回傳
+ * @param {boolean} param.isEnc - 是否加密 true（呼叫企業版 API）：加密；false：不加密（呼叫免費版 API）
  */
 async function describeDnsResult({ domainName, ip, ttl, clientip, isEnc }) {
-  // 配置校验
+  // 設定校驗
   if (isEnc && (!encId || !encKey)) {
-    throw new Error('请在云函数HTTPDNS模块中配置encId和encKey');
+    throw new Error('請在雲端函式 HTTPDNS 模組中設定 encId 和 encKey');
   }
-  // 如果不传入ip，就取客户端ip
+  // 若未傳入 ip，則取用戶端 ip
   if (!ip) {
     const auth = uniCloud.auth();
     ip = auth.getClientIP();
   }
-  // 企业版API调用需加密
+  // 企業版 API 呼叫需加密
   if (isEnc) {
     domainName = encrypt(domainName);
     ip = encrypt(ip);
@@ -57,10 +57,10 @@ async function describeDnsResult({ domainName, ip, ttl, clientip, isEnc }) {
   });
 
   if (status !== 200) {
-    throw new Error(`接口调用失败[${status} - ${statusText}]`);
+    throw new Error(`介面呼叫失敗 [${status} - ${statusText}]`);
   }
   if (!data) {
-    throw new Error('域名解析失败');
+    throw new Error('網域名稱解析失敗');
   }
   if (isEnc) {
     return decrypt(data);
@@ -71,13 +71,13 @@ async function describeDnsResult({ domainName, ip, ttl, clientip, isEnc }) {
 
 /**
  * 加密
- * @param {string} encString - 需要加密的字符串
- * @return {string} 加密数据
+ * @param {string} encString - 需要加密的字串
+ * @return {string} 加密資料
  */
 function encrypt(encString) {
   try {
     if (!encString) {
-      throw new Error('请传入待加密数据');
+      throw new Error('請傳入待加密資料');
     }
     const iv = Buffer.alloc(0);
     const cipher = crypto.createCipheriv('des-ecb', encKey, iv);
@@ -85,19 +85,19 @@ function encrypt(encString) {
     encrypText += cipher.final('hex');
     return encrypText;
   } catch (e) {
-    throw new Error('加密失败');
+    throw new Error('加密失敗');
   }
 }
 
 /**
  * 解密
- * @param {string} decString - 需要解密的字符串
- * @return {string}  解密数据
+ * @param {string} decString - 需要解密的字串
+ * @return {string} 解密資料
  */
 function decrypt(decString) {
   try {
     if (!decString) {
-      throw new Error('请传入待解密数据');
+      throw new Error('請傳入待解密資料');
     }
     const iv = Buffer.alloc(0);
     const cipher = crypto.createDecipheriv('des-ecb', encKey, iv);
@@ -105,7 +105,7 @@ function decrypt(decString) {
     decryptText += cipher.final('utf8');
     return decryptText;
   } catch (e) {
-    throw new Error('解密失败');
+    throw new Error('解密失敗');
   }
 }
 

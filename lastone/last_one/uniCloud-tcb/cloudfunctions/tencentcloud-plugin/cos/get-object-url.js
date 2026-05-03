@@ -21,23 +21,23 @@ const { secretId, secretKey } = require('../config');
 const { bucket, region, expires } = require('./config');
 
 /**
- * 获取腾讯云COS文件的临时访问地址
- * @param {object} params - 参数包装对象
- * @param {string} params.key - 将要访问COS文件的名称
- * @return {string} COS文件的访问地址（包含临时签名）
+ * 取得騰訊雲 COS 檔案的臨時存取網址
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.key - 即將存取的 COS 檔案名稱
+ * @return {string} COS 檔案的存取網址（含臨時簽名）
  */
 function getObjectURL({ key }) {
-  // 配置校验
+  // 設定校驗
   if (!secretId || !secretKey) {
-    throw new Error('请云函数配置文件中配置secretId和secretKey');
+    throw new Error('請在雲端函式設定檔中填寫 secretId 和 secretKey');
   }
   if (!bucket || !region) {
-    throw new Error('请在云函数COS模块中配置bucket和region');
+    throw new Error('請在雲端函式 COS 模組中設定 bucket 和 region');
   }
   if (isNaN(expires) || expires <= 0) {
-    throw new Error('请在云函数COS模块中配置有效的expires');
+    throw new Error('請在雲端函式 COS 模組中設定有效的 expires');
   }
-  // 生成签名信息
+  // 產生簽名資訊
   const currentDate = new Date();
   const expirationDate = new Date(currentDate.getTime() + expires * 1000);
   const keyTime = `${Math.floor(currentDate.getTime() / 1000)};${Math.floor(expirationDate.getTime() / 1000)}`;

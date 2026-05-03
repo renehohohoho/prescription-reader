@@ -15,13 +15,13 @@
  */
 
 /**
- * 通用文字-英文识别接口 https://cloud.tencent.com/document/product/866/34938
- * @param {object} params - 参数包装对象
- * @param {string} params.imageBase64 需要识别图片的base64编码
- * @param {string} params.imageUrl 需要识别图片的url
- * @param {boolean} [params.enableCoordPoint] - 单词四点坐标开关，开启可返回图片中单词的四点坐标。该参数默认值为false。
- * @param {boolean} [params.enableCandWord] - 候选字开关，开启可返回识别时多个可能的候选字（每个候选字对应其置信度）。该参数默认值为false。
- * @returns {Promise<object>} TextDetections - 检测到的文本信息
+ * 通用文字-英文識別介面 https://cloud.tencent.com/document/product/866/34938
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.imageBase64 需要識別圖片的base64編碼
+ * @param {string} params.imageUrl 需要識別圖片的url
+ * @param {boolean} [params.enableCoordPoint] - 單詞四點座標開關，開啟可返回圖片中單詞的四點座標。該參數預設值為false。
+ * @param {boolean} [params.enableCandWord] - 候選字開關，開啟可返回識別時多個可能的候選字（每個候選字對應其置信度）。該參數預設值為false。
+ * @returns {Promise<object>} TextDetections - 檢測到的文字資訊
  */
 import ocr from "./api.js";
 export default function englishOCR({

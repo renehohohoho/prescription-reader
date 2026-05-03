@@ -21,22 +21,22 @@ const { secretId, secretKey } = require('../config');
 const { bucket, region, expires } = require('./config');
 
 /**
- * 为腾讯云COS的POST Object API进行签名
- * 更多信息请访问 https://cloud.tencent.com/document/product/436/14690
- * @return {object} 上传URL以及其它签名信息
+ * 為騰訊雲 COS 的 POST Object API 進行簽名
+ * 更多資訊請參閱 https://cloud.tencent.com/document/product/436/14690
+ * @return {object} 上傳 URL 及其他簽名資訊
  */
 function signPostObjectAPI() {
-  // 配置校验
+  // 設定校驗
   if (!secretId || !secretKey) {
-    throw new Error('请云函数配置文件中配置secretId和secretKey');
+    throw new Error('請在雲端函式設定檔中填寫 secretId 和 secretKey');
   }
   if (!bucket || !region) {
-    throw new Error('请在云函数COS模块中配置bucket和region');
+    throw new Error('請在雲端函式 COS 模組中設定 bucket 和 region');
   }
   if (isNaN(expires) || expires <= 0) {
-    throw new Error('请在云函数COS模块中配置有效的expires');
+    throw new Error('請在雲端函式 COS 模組中設定有效的 expires');
   }
-  // 生成签名信息
+  // 產生簽名資訊
   const currentDate = new Date();
   const expirationDate = new Date(currentDate.getTime() + expires * 1000);
   const keyTime = `${Math.floor(currentDate.getTime() / 1000)};${Math.floor(expirationDate.getTime() / 1000)}`;

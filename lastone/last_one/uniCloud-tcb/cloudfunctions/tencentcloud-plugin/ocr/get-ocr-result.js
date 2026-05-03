@@ -19,28 +19,24 @@
 const { request } = require('./utils');
 
 /**
- * 获取OCR识别结果
- * @param {object} params - 参数包装对象
- * @param {string} params.name - 对应OCR API的Action值 https://cloud.tencent.com/document/api/866/34938
- * @param {object} params.payload - API需要的参数
- * @param {string} [params.payload.ImageBase64] - 图片的 Base64 值。支持的图片格式：PNG、JPG、JPEG，暂不支持 GIF 格式。支持的图片大小：所下载图片经 Base64 编码后不超过 3M。图片下载时间不超过 3 秒。
- * @param {string} [params.payload.ImageUrl] - 图片的 Url 地址。支持的图片格式：PNG、JPG、JPEG，暂不支持 GIF 格式。支持的图片大小：所下载图片经 Base64 编码后不超过 3M。图片下载时间不超过 3 秒。
- * @returns {object} API返回的有效数据
+ * 取得OCR識別結果
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.name - 對應OCR API的Action值 https://cloud.tencent.com/document/api/866/34938
+ * @param {object} params.payload - API所需的參數
+ * @param {string} [params.payload.ImageBase64] - 圖片的 Base64 值。支援的圖片格式：PNG、JPG、JPEG，暫不支援 GIF 格式。支援的圖片大小：所下載圖片經 Base64 編碼後不超過 3M。圖片下載時間不超過 3 秒。
+ * @param {string} [params.payload.ImageUrl] - 圖片的 Url 地址。支援的圖片格式：PNG、JPG、JPEG，暫不支援 GIF 格式。支援的圖片大小：所下載圖片經 Base64 編碼後不超過 3M。圖片下載時間不超過 3 秒。
+ * @returns {object} API回傳的有效資料
  */
 async function getOcrResult(params) {
   if (!params.name) {
-    throw new Error('缺少API Action参数');
+    throw new Error('缺少API Action參數');
   }
   if (!(params.payload.ImageBase64 || params.payload.ImageUrl)) {
-    throw new Error('ImageUrl 和 ImageBase64 必须有一个不为空');
+    throw new Error('ImageUrl 和 ImageBase64 必須有一個不為空');
   }
-  // 调用OCR识别接口
-  try {
-    const result = await request(params.name, params.payload);
-    return result;
-  } catch (e) {
-    throw new Error(e);
-  }
+  // 呼叫OCR識別介面
+  const result = await request(params.name, params.payload);
+  return result;
 }
 
 module.exports = getOcrResult;

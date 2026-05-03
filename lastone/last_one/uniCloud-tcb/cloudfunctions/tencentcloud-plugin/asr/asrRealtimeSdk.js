@@ -20,17 +20,17 @@ const { secretId, secretKey, appId } = require('../config');
 
 class RealTime {
   /**
-   * 实例化client对象
-   * @param {obejct} query 配置参数
+   * 實例化 client 物件
+   * @param {object} query 設定參數
    */
   constructor(query) {
     this.query = query || null;
   }
 
   /**
-   * 参数签名
-   * @param {string} signStr 需要签名的参数
-   * @return {string} 签名后返回的数组
+   * 參數簽名
+   * @param {string} signStr 需要簽名的參數
+   * @return {string} 簽名後回傳的字串
    */
   sign(signStr) {
     const hash = crypto.createHmac('sha1', secretKey || '');
@@ -39,7 +39,7 @@ class RealTime {
   }
 
   /**
-   * 将请求的参数转为stirng类型
+   * 將請求的參數轉為 string 型別
    * @param {object} params
    * @return {string}
    */
@@ -49,19 +49,16 @@ class RealTime {
     if (appId) {
       signStr += appId;
     }
-    const keys = Object.keys(params);
-    keys.sort();
-    for (const k in keys) {
-      if (Object.prototype.hasOwnProperty.call(keys, k)) {
-        strParam += `&${keys[k]}=${params[keys[k]]}`;
-      }
+    const keys = Object.keys(params).sort();
+    for (const key of keys) {
+      strParam += `&${key}=${params[key]}`;
     }
     const strSign = `${signStr}?${strParam.slice(1)}`;
     return strSign;
   }
 
   /**
-   * 请求参数组装
+   * 請求參數組裝
    */
   createQuery() {
     const params = {};
@@ -81,24 +78,25 @@ class RealTime {
     params.end = this.query.end;
     params.seq = this.query.seq;
 
-    // 非必填参数
-    this.query.hasOwnProperty('hotword_id') && (params.hotword_id = this.query.hotword_id);
-    this.query.hasOwnProperty('result_text_format') && (params.result_text_format = this.query.result_text_format);
-    this.query.hasOwnProperty('needvad') && (params.needvad = this.query.needvad);
-    this.query.hasOwnProperty('filter_dirty') && (params.filter_dirty = this.query.filter_dirty);
-    this.query.hasOwnProperty('filter_modal') && (params.filter_modal = this.query.filter_modal);
-    this.query.hasOwnProperty('filter_punc') && (params.filter_punc = this.query.filter_punc);
-    this.query.hasOwnProperty('convert_num_mode') && (params.convert_num_mode = this.query.convert_num_mode);
+    // 非必填參數
+    const has = (k) => Object.prototype.hasOwnProperty.call(this.query, k);
+    has('hotword_id') && (params.hotword_id = this.query.hotword_id);
+    has('result_text_format') && (params.result_text_format = this.query.result_text_format);
+    has('needvad') && (params.needvad = this.query.needvad);
+    has('filter_dirty') && (params.filter_dirty = this.query.filter_dirty);
+    has('filter_modal') && (params.filter_modal = this.query.filter_modal);
+    has('filter_punc') && (params.filter_punc = this.query.filter_punc);
+    has('convert_num_mode') && (params.convert_num_mode = this.query.convert_num_mode);
 
     return params;
   }
 
   /**
-   * 发起请求
-   * @param {string} url 请求的url
-   * @param {object} chunk 音频的buffer
-   * @param {object} headers 请求头
-   * @return {Promise<object>} 音频识别结果
+   * 發起請求
+   * @param {string} url 請求的 url
+   * @param {object} chunk 音訊的 buffer
+   * @param {object} headers 請求標頭
+   * @return {Promise<object>} 音訊辨識結果
    */
   async doRequest(url, chunk, headers) {
     const options = {
@@ -110,7 +108,7 @@ class RealTime {
     const response = await axios(options);
     const { status, statusText, data } = response;
     if (status !== 200) {
-      throw new Error(`实时语音接口调用失败[${status} - ${statusText}]`);
+      throw new Error(`即時語音介面呼叫失敗 [${status} - ${statusText}]`);
     }
     if (data.code !== 0) {
       throw new Error(data.message);
@@ -119,12 +117,12 @@ class RealTime {
   }
 
   /**
-   * 实时语音请求参数组装
+   * 即時語音請求參數組裝
    * @param {object} chunk
-   * @return {Promise<object>} 音频识别结果
+   * @return {Promise<object>} 音訊辨識結果
    */
   sendRequest(chunk) {
-    if (chunk.size === 0) {
+    if (chunk.length === 0) {
       return '';
     }
     const query = this.createQuery();
@@ -138,7 +136,7 @@ class RealTime {
     headers['Content-Type'] = 'application/octet-stream';
     headers.Host = 'asr.cloud.tencent.com';
 
-    const reqUrl = `http://${signStr.substring(4, signStr.length)}`;
+    const reqUrl = `https://${signStr.substring(4, signStr.length)}`;
     const res = this.doRequest(reqUrl, chunk, headers);
     return res;
   }

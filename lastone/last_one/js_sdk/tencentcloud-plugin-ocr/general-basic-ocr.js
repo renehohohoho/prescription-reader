@@ -15,13 +15,13 @@
  */
 
 /**
- * 通用文字-通用印刷体识别 https://cloud.tencent.com/document/product/866/33526
- * @param {object} params - 参数包装对象
- * @param {string} params.imageBase64 - 需要识别图片的base64编码
- * @param {string} params.imageUrl - 需要识别图片的url
- * @param {boolean} [params.scene] - 保留字段
- * @param {boolean} [params.languageType] - 识别语言类型 zh\auto\jap\kor\spa\fre\ger\por\vie\may\rus\ita\hol\swe\fin\dan\nor\hun\tha\lat
- * @returns {Promise<object>} - 检测到的通用文字信息
+ * 通用文字-通用印刷體識別 https://cloud.tencent.com/document/product/866/33526
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.imageBase64 - 需要識別圖片的base64編碼
+ * @param {string} params.imageUrl - 需要識別圖片的url
+ * @param {boolean} [params.scene] - 保留欄位
+ * @param {boolean} [params.languageType] - 識別語言類型 zh\auto\jap\kor\spa\fre\ger\por\vie\may\rus\ita\hol\swe\fin\dan\nor\hun\tha\lat
+ * @returns {Promise<object>} - 檢測到的通用文字資訊
  */
 import ocr from "./api.js";
 export default function generalBasicOCR({

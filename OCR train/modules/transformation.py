@@ -31,7 +31,8 @@ class TPS_SpatialTransformerNetwork(nn.Module):
         build_P_prime = self.GridGenerator.build_P_prime(batch_C_prime)  # batch_size x n (= I_r_width x I_r_height) x 2
         build_P_prime_reshape = build_P_prime.reshape([build_P_prime.size(0), self.I_r_size[0], self.I_r_size[1], 2])
         
-        if torch.__version__ > "1.2.0":
+        torch_version = tuple(int(x) for x in torch.__version__.split('+')[0].split('.')[:2])
+        if torch_version > (1, 2):
             batch_I_r = F.grid_sample(batch_I, build_P_prime_reshape, padding_mode='border', align_corners=True)
         else:
             batch_I_r = F.grid_sample(batch_I, build_P_prime_reshape, padding_mode='border')

@@ -18,41 +18,33 @@
 const { request } = require('./utils.js');
 const RealTime = require('./asrRealtimeSdk');
 /**
- * 获取语音识别相关接口
- * @param {object} params - 参数包装对象
- * @param {string} params.name - 对应图像识别 API的Action值 https://cloud.tencent.com/document/product/1093/35637
- * @param {object} params.payload - API需要的参数
- * @return {Promise<object>} API返回的有效数据
+ * 取得語音辨識相關介面
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.name - 對應語音辨識 API 的 Action 值 https://cloud.tencent.com/document/product/1093/35637
+ * @param {object} params.payload - API 所需的參數
+ * @return {Promise<object>} API 回傳的有效資料
  */
 async function getAsrResult(params) {
   if (!params.name) {
-    throw new Error('缺少API Action参数');
+    throw new Error('缺少 API Action 參數');
   }
-  try {
-    const result = await request(params.name, params.payload);
-    return result;
-  } catch (e) {
-    throw new Error(e);
-  }
+  const result = await request(params.name, params.payload);
+  return result;
 }
 
 /**
- * 实时语音识别
+ * 即時語音識別
  * @param {object} params
- * @param {object} params.data // 音频文件
- * @param {object} params.params // 参数
- * @return {Promise<object>} 语音识别结果
+ * @param {object} params.data // 音訊檔案
+ * @param {object} params.params // 參數
+ * @return {Promise<object>} 語音識別結果
  */
 async function realTimeVoice({ data: voiceData, params }) {
-  try {
-    // 创建调用实例
-    const asrReq = new RealTime(params);
-    const chunk = Buffer.from(voiceData, 'base64');
-    const result = await asrReq.sendRequest(chunk);
-    return result;
-  } catch (e) {
-    throw new Error(e);
-  }
+  // 建立呼叫實例
+  const asrReq = new RealTime(params);
+  const chunk = Buffer.from(voiceData, 'base64');
+  const result = await asrReq.sendRequest(chunk);
+  return result;
 }
 
 module.exports = {

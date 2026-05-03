@@ -16,76 +16,76 @@
 
 "use strict";
 // OCR API
-// ===行业文档识别接口===
-import tableOCR from "./table-ocr.js"; // 表格识别
-import arithmeticOCR from "./arithmetic-ocr.js"; // 算式识别
-import formulaOCR from "./formula-ocr.js"; // 数学公式识别
-import eduPaperOCR from "./edu-paper-ocr.js"; // 数学试题识别
-import insuranceBillOCR from "./insurance-bill-ocr.js"; // 保险单据识别
-import sealOCR from "./seal-ocr"; // 印章识别
+// ===行業文件識別介面===
+import tableOCR from "./table-ocr.js"; // 表格識別
+import arithmeticOCR from "./arithmetic-ocr.js"; // 算式識別
+import formulaOCR from "./formula-ocr.js"; // 數學公式識別
+import eduPaperOCR from "./edu-paper-ocr.js"; // 數學試題識別
+import insuranceBillOCR from "./insurance-bill-ocr.js"; // 保險單據識別
+import sealOCR from "./seal-ocr"; // 印章識別
 
-// ===卡证文字识别相关接口===
-import mlidPassportOCR from "./mlid-passport-ocr.js"; // 护照识别（港澳台地区及境外护照）
-import mainlandPermitOCR from "./mainland-permit-ocr.js"; // 港澳台来往内地通行证识别
-import hmtResidentPermitOCR from "./hmt-resident-permit-ocr.js"; // 港澳台居住证识别
-import residenceBookletOCR from "./residence-booklet-ocr.js"; // 户口本识别
-import propOwnerCertOCR from "./prop-owner-cert-ocr.js"; // 房产证识别接口
-import businessCardOCR from "./business-card-ocr.js"; // 名片识别
-import bizLicenseOCR from "./biz-license-ocr.js"; // 营业执照识别
-import bankCardOCR from "./bank-card-ocr"; // 银行卡识别
-import orgCodeCertOCR from "./org-code-cert-ocr"; // 组织机构代码证识别
-import institutionOCR from "./institution-ocr"; // 事业单位法人证书识别
-import estateCertOCR from "./estate-cert-ocr"; // 不动产权证识别
-import enterpriseLicenseOCR from "./enterprise-license-ocr"; // 企业证照识别
-import passportOCR from "./passport-ocr"; // 护照识别（中国大陆地区护照）
-import permitOCR from "./permit-ocr"; // 港澳台通行证识别
-import idCardOCR from "./id-card-ocr"; // 身份证识别
+// ===卡證文字識別相關介面===
+import mlidPassportOCR from "./mlid-passport-ocr.js"; // 護照識別（港澳台地區及境外護照）
+import mainlandPermitOCR from "./mainland-permit-ocr.js"; // 港澳台往來內地通行證識別
+import hmtResidentPermitOCR from "./hmt-resident-permit-ocr.js"; // 港澳台居住證識別
+import residenceBookletOCR from "./residence-booklet-ocr.js"; // 戶口本識別
+import propOwnerCertOCR from "./prop-owner-cert-ocr.js"; // 房產證識別介面
+import businessCardOCR from "./business-card-ocr.js"; // 名片識別
+import bizLicenseOCR from "./biz-license-ocr.js"; // 營業執照識別
+import bankCardOCR from "./bank-card-ocr"; // 銀行卡識別
+import orgCodeCertOCR from "./org-code-cert-ocr"; // 組織機構代碼證識別
+import institutionOCR from "./institution-ocr"; // 事業單位法人證書識別
+import estateCertOCR from "./estate-cert-ocr"; // 不動產權證識別
+import enterpriseLicenseOCR from "./enterprise-license-ocr"; // 企業證照識別
+import passportOCR from "./passport-ocr"; // 護照識別（中國大陸地區護照）
+import permitOCR from "./permit-ocr"; // 港澳台通行證識別
+import idCardOCR from "./id-card-ocr"; // 身份證識別
 
-// ===票据单据识别接口===
-import vatInvoiceOCR from "./vat-invoice-ocr"; // 增值税发票识别
-import waybillOCR from "./waybill-ocr"; // 运单识别
-import finanBillSliceOCR from "./finan-bill-slice-ocr"; // 金融票据切片识别
-import finanBillOCR from "./finan-bill-ocr"; // 金融票据整单识别
-import vatRollInvoiceOCR from "./vat-roll-invoice-ocr"; // 增值税发票（卷票）识别
-import tollInvoiceOCR from "./toll-invoice-ocr"; // 过路过桥费发票识别
-import shipInvoiceOCR from "./ship-invoice-ocr"; // 轮船票识别
-import mixedInvoiceOCR from "./mixed-invoice-ocr"; // 混贴票据识别
-import mixedInvoiceDetect from "./mixed-invoice-detect"; // 混贴票据分类
-import invoiceGeneralOCR from "./invoice-general-ocr"; // 通用机打发票识别
-import busInvoiceOCR from "./bus-invoice-ocr"; // 汽车票识别
-import trainTicketOCR from "./train-ticket-ocr"; // 火车票识别
-import dutyPaidProofOCR from "./duty-paid-proof-ocr"; // 完税证明识别
-import taxiInvoiceOCR from "./taxi-invoice-ocr"; // 出租车发票识别
-import quotaInvoiceOCR from "./quota-invoice-ocr"; // 定额发票识别
-import flightInvoiceOCR from "./flight-voice-ocr"; // 机票行程单识别
-import carInvoiceOCR from "./car-invoice-ocr"; // 购车发票识别
+// ===票據單據識別介面===
+import vatInvoiceOCR from "./vat-invoice-ocr"; // 增值稅發票識別
+import waybillOCR from "./waybill-ocr"; // 運單識別
+import finanBillSliceOCR from "./finan-bill-slice-ocr"; // 金融票據切片識別
+import finanBillOCR from "./finan-bill-ocr"; // 金融票據整單識別
+import vatRollInvoiceOCR from "./vat-roll-invoice-ocr"; // 增值稅發票（捲票）識別
+import tollInvoiceOCR from "./toll-invoice-ocr"; // 過路過橋費發票識別
+import shipInvoiceOCR from "./ship-invoice-ocr"; // 輪船票識別
+import mixedInvoiceOCR from "./mixed-invoice-ocr"; // 混貼票據識別
+import mixedInvoiceDetect from "./mixed-invoice-detect"; // 混貼票據分類
+import invoiceGeneralOCR from "./invoice-general-ocr"; // 通用機打發票識別
+import busInvoiceOCR from "./bus-invoice-ocr"; // 汽車票識別
+import trainTicketOCR from "./train-ticket-ocr"; // 火車票識別
+import dutyPaidProofOCR from "./duty-paid-proof-ocr"; // 完稅證明識別
+import taxiInvoiceOCR from "./taxi-invoice-ocr"; // 計程車發票識別
+import quotaInvoiceOCR from "./quota-invoice-ocr"; // 定額發票識別
+import flightInvoiceOCR from "./flight-voice-ocr"; // 機票行程單識別
+import carInvoiceOCR from "./car-invoice-ocr"; // 購車發票識別
 
-// ===汽车场景相关接口===
-import vehicleLicenseOCR from "./vehicle-license-ocr"; // 行驶证识别
-import licensePlateOCR from "./license-plate-ocr"; // 车牌识别
-import driverLicenseOCR from "./driver-license-ocr"; // 驾驶证识别
-import vinOCR from "./vin-ocr"; // 车辆VIN码识别
-import vehicleRegCertOCR from "./vehicle-reg-cert-ocr"; // 机动车登记证书识别
+// ===汽車場景相關介面===
+import vehicleLicenseOCR from "./vehicle-license-ocr"; // 行駛證識別
+import licensePlateOCR from "./license-plate-ocr"; // 車牌識別
+import driverLicenseOCR from "./driver-license-ocr"; // 駕駛證識別
+import vinOCR from "./vin-ocr"; // 車輛VIN碼識別
+import vehicleRegCertOCR from "./vehicle-reg-cert-ocr"; // 機動車登記證書識別
 
-// ===通用文字识别接口===
-import englishOCR from "@/js_sdk/tencentcloud-plugin-ocr/english-ocr.js"; // 英文识别接口
-import generalBasicOCR from "@/js_sdk/tencentcloud-plugin-ocr/general-basic-ocr.js"; // 通用印刷体识别
-import generalAccurateOCR from "@/js_sdk/tencentcloud-plugin-ocr/general-accurate-ocr.js"; // 通用印刷体识别（高精度版）
-import generalEfficientOCR from "@/js_sdk/tencentcloud-plugin-ocr/general-efficient-ocr.js"; // 通用印刷体识别（精简版）
-import generalFastOCR from "@/js_sdk/tencentcloud-plugin-ocr/general-fast-ocr.js"; // 通用印刷体识别（高速版）
-import generalHandwritingOCR from "@/js_sdk/tencentcloud-plugin-ocr/general-handwriting-ocr.js"; // 通用手写体识别
-import qrcodeOCR from "@/js_sdk/tencentcloud-plugin-ocr/qrcode-ocr.js"; // 二维码和条形码识别
-import textDetect from "@/js_sdk/tencentcloud-plugin-ocr/text-detect.js"; // 快速文本检测
+// ===通用文字識別介面===
+import englishOCR from "@/js_sdk/tencentcloud-plugin-ocr/english-ocr.js"; // 英文識別介面
+import generalBasicOCR from "@/js_sdk/tencentcloud-plugin-ocr/general-basic-ocr.js"; // 通用印刷體識別
+import generalAccurateOCR from "@/js_sdk/tencentcloud-plugin-ocr/general-accurate-ocr.js"; // 通用印刷體識別（高精度版）
+import generalEfficientOCR from "@/js_sdk/tencentcloud-plugin-ocr/general-efficient-ocr.js"; // 通用印刷體識別（精簡版）
+import generalFastOCR from "@/js_sdk/tencentcloud-plugin-ocr/general-fast-ocr.js"; // 通用印刷體識別（高速版）
+import generalHandwritingOCR from "@/js_sdk/tencentcloud-plugin-ocr/general-handwriting-ocr.js"; // 通用手寫體識別
+import qrcodeOCR from "@/js_sdk/tencentcloud-plugin-ocr/qrcode-ocr.js"; // 二維碼和條形碼識別
+import textDetect from "@/js_sdk/tencentcloud-plugin-ocr/text-detect.js"; // 快速文字偵測
 
 export {
-  // ===行业文档识别接口===
+  // ===行業文件識別介面===
   tableOCR,
   arithmeticOCR,
   formulaOCR,
   eduPaperOCR,
   insuranceBillOCR,
   sealOCR,
-  // ===卡证文字识别相关接口===
+  // ===卡證文字識別相關介面===
   mlidPassportOCR,
   mainlandPermitOCR,
   hmtResidentPermitOCR,
@@ -101,7 +101,7 @@ export {
   passportOCR,
   permitOCR,
   idCardOCR,
-  // ===票据单据识别接口===
+  // ===票據單據識別介面===
   vatInvoiceOCR,
   waybillOCR,
   finanBillSliceOCR,
@@ -119,13 +119,13 @@ export {
   quotaInvoiceOCR,
   flightInvoiceOCR,
   carInvoiceOCR,
-  // ===汽车场景识别相关接口===
+  // ===汽車場景識別相關介面===
   vehicleLicenseOCR,
   licensePlateOCR,
   driverLicenseOCR,
   vinOCR,
   vehicleRegCertOCR,
-  // ===通用文字识别接口===
+  // ===通用文字識別介面===
   englishOCR,
   generalBasicOCR,
   generalAccurateOCR,

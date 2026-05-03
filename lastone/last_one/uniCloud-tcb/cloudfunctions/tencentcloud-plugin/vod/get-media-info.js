@@ -21,23 +21,23 @@ const getAntiTheftURL = require('./get-anti-theft-url.js');
 const { antiTheftKey } = require('./config');
 
 /**
- * 获取腾讯云云点播媒体详细信息
- * 更多信息请访问 https://cloud.tencent.com/document/api/266/31763
- * @param {object} params - 参数包装对象
- * @param {string[]} params.mediaId - 媒体ID
- * @return {Promise<object>} 媒体详细信息
+ * 取得騰訊雲雲點播媒體詳細資訊
+ * 更多資訊請訪問 https://cloud.tencent.com/document/api/266/31763
+ * @param {object} params - 參數包裝物件
+ * @param {string[]} params.mediaId - 媒體ID
+ * @return {Promise<object>} 媒體詳細資訊
  */
 async function getUploadSignature({ mediaId }) {
   if (!mediaId) {
-    throw new Error('待查询媒体ID不能为空');
+    throw new Error('待查詢媒體ID不得為空');
   }
-  // 调用腾讯云查询接口
+  // 呼叫騰訊雲查詢介面
   const {
     MediaInfoSet: [mediaInfo]
   } = await request('DescribeMediaInfos', {
     FileIds: [mediaId]
   });
-  // 如果有配置antiTheftKey则自动生成带签名的url
+  // 如果有設定antiTheftKey則自動生成帶簽名的url
   if (mediaInfo && antiTheftKey) {
     mediaInfo.BasicInfo.AntiTheftUrl = getAntiTheftURL({
       mediaUrl: mediaInfo.BasicInfo.MediaUrl

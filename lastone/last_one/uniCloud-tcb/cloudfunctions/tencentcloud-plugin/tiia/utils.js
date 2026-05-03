@@ -21,10 +21,10 @@ const { region } = require('./config');
 const { sign } = require('../common');
 
 /**
- * 请求腾讯云图像识别接口公共方法
- * @param {string} action - 接口请求action
- * @param {object} payload - 接口请求体
- * @returns {object} API返回的有效数据
+ * 請求騰訊雲圖像識別介面公共方法
+ * @param {string} action - 介面請求action
+ * @param {object} payload - 介面請求體
+ * @returns {object} API回傳的有效資料
  */
 async function request(action, payload) {
   const [timestamp, authorization] = sign('tiia', JSON.stringify(payload));
@@ -44,7 +44,10 @@ async function request(action, payload) {
   const response = await axios(options);
   const { status, statusText, data } = response;
   if (status !== 200) {
-    throw new Error(`${action}接口调用失败[${status} - ${statusText}]`);
+    throw new Error(`${action} 介面呼叫失敗 [${status} - ${statusText}]`);
+  }
+  if (!data || !data.Response) {
+    throw new Error(`${action} API 回傳格式異常`);
   }
   if (data.Response.Error) {
     throw new Error(data.Response.Error.Message);

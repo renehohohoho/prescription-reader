@@ -18,15 +18,15 @@
 const { request } = require('./utils.js');
 
 /**
- * 获取人脸核身结果
- * @param {object} params - 参数包装对象
- * @param {string} params.name - 人脸核身 API的Action值 https://cloud.tencent.com/document/product/1007/31320
- * @param {object} params.payload - API需要的参数
- * @return {Promise<object>} API返回数据
+ * 取得人臉核身結果
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.name - 人臉核身 API 的 Action 值 https://cloud.tencent.com/document/product/1007/31320
+ * @param {object} params.payload - API 所需的參數
+ * @return {Promise<object>} API 回傳資料
  */
 async function getFaceidResult(params) {
   if (!params.name) {
-    throw new Error('缺少API Action参数');
+    throw new Error('缺少 API Action 參數');
   }
   const result = await request(params.name, params.payload);
   return result;

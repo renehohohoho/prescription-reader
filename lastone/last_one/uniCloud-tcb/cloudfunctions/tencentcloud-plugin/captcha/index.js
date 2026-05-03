@@ -20,35 +20,35 @@ const { request } = require('./utils.js');
 const getExtraReportInfo = () => ({ captcha_appid: appId });
 
 /**
- * 获取配置在云函数的短信appid
+ * 取得設定在雲端函式的 appId
  */
 function getAppId() {
   return appId;
 }
 
 /**
- * 核查验证码票据结果
+ * 核查驗證碼票據結果
  * @param {*} params
- * @param {integer} params.CaptchaType - 固定填值：9。可在控制台配置不同验证码类型。
- * @param {string} params.Ticket - 前端回调函数返回的用户验证票据
- * @param {string} params.UserIp - 用户操作来源的外网 IP
- * @param {string} params.Randstr - 前端回调函数返回的随机字符串
- * @param {integer} [params.BusinessId] - 业务 ID，网站或应用在多个业务中使用此服务，通过此 ID 区分统计数据
- * @param {integer} [params.SceneId] - 场景 ID，网站或应用的业务下有多个场景使用此服务，通过此 ID 区分统计数据
- * @param {string} [params.MacAddress] - mac 地址或设备唯一标识
- * @param {string} [params.Imei] - 手机设备号
- * @param {integer} [params.NeedGetCaptchaTime] - 是否返回前端获取验证码时间，取值1：需要返回
+ * @param {integer} params.CaptchaType - 固定填值：9。可在控制台設定不同驗證碼類型。
+ * @param {string} params.Ticket - 前端回呼函式回傳的使用者驗證票據
+ * @param {string} params.UserIp - 使用者操作來源的外網 IP
+ * @param {string} params.Randstr - 前端回呼函式回傳的隨機字串
+ * @param {integer} [params.BusinessId] - 業務 ID，網站或應用在多個業務中使用此服務，透過此 ID 區分統計資料
+ * @param {integer} [params.SceneId] - 場景 ID，網站或應用的業務下有多個場景使用此服務，透過此 ID 區分統計資料
+ * @param {string} [params.MacAddress] - mac 位址或裝置唯一識別碼
+ * @param {string} [params.Imei] - 手機裝置號碼
+ * @param {integer} [params.NeedGetCaptchaTime] - 是否回傳前端取得驗證碼時間，取值 1：需要回傳
  */
 async function describeCaptchaResult(params) {
-  // 配置校验
+  // 設定校驗
   if (!appId || !appSecretKey) {
-    throw new Error('请在云函数CAPTCHA模块中配置appId和AppSecretKey');
+    throw new Error('請在雲端函式 CAPTCHA 模組中設定 appId 和 AppSecretKey');
   }
   const auth = uniCloud.auth();
   const userIp = auth.getClientIP();
-  // 删除掉云函数带上来的额外参数
+  // 刪除雲端函式帶上來的額外參數
   delete params.uniIdToken;
-  // 调用核查验证码票据接口
+  // 呼叫核查驗證碼票據介面
   const result = await request('DescribeCaptchaResult', {
     AppSecretKey: appSecretKey,
     CaptchaAppId: Number(appId),

@@ -21,48 +21,36 @@ import {
 } from './util.js';
 
 /**
- * 选择图片转换为Base64格式输出
- * @return {Promise<string>} 返回图片的Base64编码
+ * 選擇圖片轉換為Base64格式輸出
+ * @return {Promise<string>} 返回圖片的Base64編碼
  */
 export default async function chooseImage2Base64() {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let [error, res] = await uni.chooseImage({
-        count: 1,
-      });
-      if (error) {
-        throw new Error(error);
-      }
-      // #ifdef H5
-      if (!/^image/.test(res.tempFiles[0].type)) {
-        throw new Error('文件类型错误');
-      }
-      // #endif
-      const tempFilePath = res.tempFilePaths[0];
-      let base64Data = '';
-      // #ifdef H5
-      base64Data = await blob2Base64(res.tempFiles[0]);
-      base64Data = (/.+;\s*base64\s*,\s*(.+)$/i.exec(base64Data) || [])[1];
-      resolve(base64Data);
-      // #endif
-      // #ifdef MP
-      base64Data = await uni.getFileSystemManager().readFile({
-        filePath: tempFilePath,
-        encoding: "base64",
-        success: ({
-          data
-        }) => {
-          resolve(data);
-        },
-      });
-      // #endif
-      // #ifdef APP-PLUS
-      base64Data = await filePath2Base64(tempFilePath);
-      base64Data = (/.+;\s*base64\s*,\s*(.+)$/i.exec(base64Data) || [])[1];
-      resolve(base64Data);
-      // #endif
-    } catch (error) {
-      throw new Error(error);
-    }
-  })
+  const [error, res] = await uni.chooseImage({ count: 1 });
+  if (error) {
+    throw error instanceof Error ? error : new Error(String(error));
+  }
+
+  // #ifdef H5
+  if (!/^image/.test(res.tempFiles[0].type)) {
+    throw new Error('檔案類型錯誤');
+  }
+  const h5Base64 = await blob2Base64(res.tempFiles[0]);
+  return (/.+;\s*base64\s*,\s*(.+)$/i.exec(h5Base64) || [])[1];
+  // #endif
+
+  // #ifdef MP
+  return new Promise((resolve, reject) => {
+    uni.getFileSystemManager().readFile({
+      filePath: res.tempFilePaths[0],
+      encoding: 'base64',
+      success: ({ data }) => resolve(data),
+      fail: (err) => reject(new Error(err.errMsg || '讀取檔案失敗')),
+    });
+  });
+  // #endif
+
+  // #ifdef APP-PLUS
+  const appBase64 = await filePath2Base64(res.tempFilePaths[0]);
+  return (/.+;\s*base64\s*,\s*(.+)$/i.exec(appBase64) || [])[1];
+  // #endif
 }

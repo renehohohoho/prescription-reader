@@ -15,11 +15,11 @@
  */
 
 /**
- * 卡证文字-护照识别（港澳台地区及境外护照） https://cloud.tencent.com/document/product/866/37657
- * @param {object} params - 参数包装对象
- * @param {string} params.imageBase64 - 需要识别图片的base64编码
- * @param {boolean} [params.retImage] - 是否返回图片
- * @returns {Promise<object>} - 返回卡证信息
+ * 卡證文字-護照識別（港澳台地區及境外護照） https://cloud.tencent.com/document/product/866/37657
+ * @param {object} params - 參數包裝物件
+ * @param {string} params.imageBase64 - 需要識別圖片的base64編碼
+ * @param {boolean} [params.retImage] - 是否返回圖片
+ * @returns {Promise<object>} - 返回卡證資訊
  */
 import ocr from "./api.js";
 export default function mlidPassportOCR({ imageBase64, imageUrl, retImage }) {

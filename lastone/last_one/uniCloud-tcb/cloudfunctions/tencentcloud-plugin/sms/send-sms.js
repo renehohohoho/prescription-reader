@@ -20,19 +20,19 @@ const { request } = require('./utils');
 const { appId, appSign } = require('./config');
 
 /**
- * 发送短信
- * @param {object} params - 参数包装对象
- * @param {string[]} params.phoneNumbers - 手机号列表
- * @param {string} params.templateId - 短信模板ID
- * @param {string[]} params.templateParams - 短信模板参数列表
- * @return {Promise<object>} 短信发送状态信息，详见文档 https://cloud.tencent.com/document/api/382/38778
+ * 發送簡訊
+ * @param {object} params - 參數包裝物件
+ * @param {string[]} params.phoneNumbers - 手機號碼清單
+ * @param {string} params.templateId - 簡訊範本ID
+ * @param {string[]} params.templateParams - 簡訊範本參數清單
+ * @return {Promise<object>} 簡訊發送狀態資訊，詳見文件 https://cloud.tencent.com/document/api/382/38778
  */
 async function sendSMS({ phoneNumbers, templateId, templateParams }) {
-  // 配置校验
+  // 設定校驗
   if (!appId || !appSign) {
-    throw new Error('请在云函数SMS模块中配置appId和appSign');
+    throw new Error('請在雲端函式SMS模組中設定appId和appSign');
   }
-  // 调用腾讯云发送SMS接口
+  // 呼叫騰訊雲發送SMS介面
   const result = await request('SendSms', {
     SmsSdkAppid: appId,
     Sign: appSign,
