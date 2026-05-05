@@ -27,3 +27,10 @@ lastone/last_one/uniCloud-tcb/cloudfunctions/tencentcloud-plugin/config.js
 .DS_Store
 Thumbs.db
 *.lnk
+
+# data analyst additions
+config.py
+data/input/*
+!data/input/.gitkeep
+data/output/*
+!data/output/.gitkeep
