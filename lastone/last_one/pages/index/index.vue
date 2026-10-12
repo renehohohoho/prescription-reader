@@ -55,7 +55,6 @@
 
 <script>
 import { generalHandwritingOCR, generalBasicOCR } from '@/js_sdk/tencentcloud-plugin-ocr';
-import config from '@/config.js';
 
 export default {
   data() {
@@ -112,58 +111,17 @@ export default {
       }
     },
 
-    callDeepSeekAPI(userMessage) {
-      return new Promise((resolve, reject) => {
-        uni.request({
-          url: 'https://api.deepseek.com/chat/completions',
-          method: 'POST',
-          timeout: 60000,
-          header: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${config.deepseekApiKey}`
-          },
-          data: {
-            model: 'deepseek-chat',
-            messages: [
-              {
-                role: 'system',
-                content: [
-                  'You are a highly experienced medical professional specializing in decoding',
-                  'and interpreting prescriptions, patient notes, and unclear handwriting.',
-                  '',
-                  'Your task is to:',
-                  '0. Output language must match the input language.',
-                  '1. Identify and explain any medical terms, symptoms, or medications in the text.',
-                  '2. Describe each medication: purpose, common uses, and dosage (if available).',
-                  '3. Ignore unrelated content (patient names, dates) unless medically relevant.',
-                  '4. Output only the interpreted medical content in a clear, concise format.'
-                ].join('\n')
-              },
-              {
-                role: 'user',
-                content: `Please decode and analyze the following text:\n${userMessage}`
-              }
-            ],
-            stream: false
-          },
-          success: (res) => {
-            if (res.statusCode === 200) {
-              const content = res.data?.choices?.[0]?.message?.content;
-              if (!content) {
-                reject(new Error('DeepSeek API 回傳格式異常'));
-                return;
-              }
-              this.deepSeekResult = content;
-              resolve(this.deepSeekResult);
-            } else {
-              reject(new Error(`DeepSeek API 錯誤（${res.statusCode}）`));
-            }
-          },
-          fail: (err) => {
-            reject(new Error(`網路請求失敗：${err.errMsg}`));
-          }
-        });
+    async callDeepSeekAPI(userMessage) {
+      // 金鑰只存在 deepseek-chat 雲端函式，App 端不直接呼叫 DeepSeek
+      const { result } = await uniCloud.callFunction({
+        name: 'deepseek-chat',
+        data: { text: userMessage }
       });
+      if (!result || !result.content) {
+        throw new Error('DeepSeek API 回傳格式異常');
+      }
+      this.deepSeekResult = result.content;
+      return this.deepSeekResult;
     },
 
     chooseImageToBase64() {

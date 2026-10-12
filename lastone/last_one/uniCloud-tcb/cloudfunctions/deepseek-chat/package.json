@@ -1,0 +1,7 @@
+{
+    "name": "deepseek-chat",
+    "version": "1.0.0",
+    "main": "index.js",
+    "dependencies": {},
+    "cloudfunction-config": { "memorySize": 256, "timeout": 60, "path": "", "runtime": "Nodejs16" }
+}

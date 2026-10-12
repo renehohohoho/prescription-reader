@@ -81,7 +81,7 @@ with col_left:
                  color="處方次數", color_continuous_scale="Blues")
     fig.update_layout(yaxis={"categoryorder": "total ascending"}, showlegend=False,
                       coloraxis_showscale=False, height=500)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 with col_right:
     st.subheader("診斷分布 Top 15")
@@ -93,7 +93,7 @@ with col_right:
     fig2 = px.pie(diag_counts, names="診斷", values="次數", hole=0.4)
     fig2.update_traces(textposition="inside", textinfo="percent+label")
     fig2.update_layout(height=500, showlegend=False)
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, width="stretch")
 
 # ── Time series ───────────────────────────────────────────────────────────────
 st.subheader("每月處方量趨勢")
@@ -108,7 +108,7 @@ monthly = (
 monthly.columns = ["月份", "處方數"]
 if not monthly.empty:
     fig3 = px.line(monthly, x="月份", y="處方數", markers=True)
-    st.plotly_chart(fig3, use_container_width=True)
+    st.plotly_chart(fig3, width="stretch")
 else:
     st.info("日期資料不足，無法顯示趨勢。")
 
@@ -120,11 +120,11 @@ if not freq_counts.empty:
     fig4 = px.bar(freq_counts, x="頻次", y="次數", color="次數",
                   color_continuous_scale="Greens")
     fig4.update_layout(coloraxis_showscale=False)
-    st.plotly_chart(fig4, use_container_width=True)
+    st.plotly_chart(fig4, width="stretch")
 
 # ── Raw data table ────────────────────────────────────────────────────────────
 with st.expander("原始資料表"):
     display_cols = ["source_file", "prescription_date", "patient_name",
                     "doctor_name", "hospital", "diagnosis",
                     "med_name", "dosage", "frequency", "duration_days"]
-    st.dataframe(df[[c for c in display_cols if c in df.columns]], use_container_width=True)
+    st.dataframe(df[[c for c in display_cols if c in df.columns]], width="stretch")

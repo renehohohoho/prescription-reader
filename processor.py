@@ -4,12 +4,7 @@ Input: image path → Output: structured dict with extracted fields.
 """
 
 import json
-import re
 from pathlib import Path
-
-import easyocr
-from openai import OpenAI
-from PIL import Image
 
 try:
     import config
@@ -17,13 +12,29 @@ except ImportError:
     raise SystemExit("請先複製 config.example.py 為 config.py 並填入 API Key")
 
 _reader = None
+_client = None
 
 
 def _get_reader():
     global _reader
     if _reader is None:
-        _reader = easyocr.Reader(config.OCR_LANGUAGES, gpu=config.OCR_GPU)
+        import easyocr
+
+        # verbose=False: the model-download progress bar crashes on non-UTF-8 consoles
+        _reader = easyocr.Reader(config.OCR_LANGUAGES, gpu=config.OCR_GPU, verbose=False)
     return _reader
+
+
+def _get_client():
+    global _client
+    if _client is None:
+        from openai import OpenAI
+
+        _client = OpenAI(
+            api_key=config.DEEPSEEK_API_KEY,
+            base_url=config.DEEPSEEK_BASE_URL,
+        )
+    return _client
 
 
 def ocr_image(image_path: str) -> str:
@@ -60,23 +71,25 @@ _SYSTEM_PROMPT = """你是一位醫療資料分析師。請從以下處方 OCR �
 
 def extract_fields(ocr_text: str) -> dict:
     """Send OCR text to DeepSeek and return structured dict."""
-    client = OpenAI(
-        api_key=config.DEEPSEEK_API_KEY,
-        base_url=config.DEEPSEEK_BASE_URL,
-    )
-    response = client.chat.completions.create(
+    response = _get_client().chat.completions.create(
         model=config.DEEPSEEK_MODEL,
         messages=[
             {"role": "system", "content": _SYSTEM_PROMPT},
             {"role": "user", "content": ocr_text},
         ],
         temperature=0,
+        response_format={"type": "json_object"},
     )
-    raw = response.choices[0].message.content.strip()
-    # Strip markdown code fences if present
-    raw = re.sub(r"^```[a-z]*\n?", "", raw)
-    raw = re.sub(r"\n?```$", "", raw)
-    return json.loads(raw)
+    raw = (response.choices[0].message.content or "").strip()
+    if not raw:
+        raise ValueError("DeepSeek 回傳空白內容")
+    try:
+        fields = json.loads(raw)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"DeepSeek 回傳的不是合法 JSON：{e}") from e
+    if not isinstance(fields, dict):
+        raise ValueError("DeepSeek 回傳的 JSON 不是物件")
+    return fields
 
 
 def process(image_path: str) -> dict:

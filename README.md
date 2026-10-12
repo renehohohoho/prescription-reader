@@ -30,12 +30,16 @@ prescription-reader/
 ├── processor.py          # Core pipeline: image → OCR → LLM → structured dict
 ├── batch_process.py      # Batch CLI: folder → CSV / Excel
 ├── dashboard.py          # Streamlit analytics dashboard
+├── make_samples.py       # Synthetic prescription image generator
 ├── config.py             # API keys & settings (git-ignored)
 ├── config.example.py     # Settings template
 ├── requirements.txt
+├── requirements-dev.txt  # + pytest
 ├── data/
 │   ├── input/            # Place prescription images here (jpg/png)
-│   └── output/           # Batch output CSV / Excel
+│   ├── output/           # Batch output CSV / Excel
+│   └── samples/          # Synthetic sample prescriptions
+├── tests/                # pytest unit tests (no API calls)
 └── notebooks/
     └── analysis.ipynb    # EDA notebook
 ```
@@ -55,6 +59,8 @@ Custom text recognition model trained in PyTorch on prescription-domain characte
 
 Cross-platform app (iOS / Android / WeChat Mini Program) built with uni-app + Vue 3. Captures a prescription photo, runs Tencent Cloud OCR, and returns an AI-generated clinical interpretation via DeepSeek.
 
+Both OCR and DeepSeek are called through uniCloud cloud functions (`tencentcloud-plugin`, `deepseek-chat`), so no API key ships inside the app bundle. Copy each function's `config.example.js` to `config.js` and fill in the credentials before uploading the functions.
+
 ---
 
 ## Tech Stack
@@ -73,17 +79,22 @@ Cross-platform app (iOS / Android / WeChat Mini Program) built with uni-app + Vu
 ## Quick Start
 
 ```bash
+python -m venv .venv             # Python 3.13 recommended
 pip install -r requirements.txt
 cp config.example.py config.py   # fill in DEEPSEEK_API_KEY
 
-# Single image
-python processor.py data/samples/rx001.jpg
+# Single image (synthetic sample)
+python processor.py data/samples/rx001.png
 
 # Batch processing
 python batch_process.py --input data/input --output data/output
 
 # Launch dashboard
 streamlit run dashboard.py
+
+# Regenerate synthetic samples / run tests
+python make_samples.py
+pip install -r requirements-dev.txt && pytest
 ```
 
 ---
@@ -98,11 +109,13 @@ streamlit run dashboard.py
 | `hospital` | Healthcare institution |
 | `prescription_date` | Date of prescription |
 | `diagnosis` | Diagnosis |
+| `prescription_notes` | Other instructions on the prescription |
 | `med_name` | Drug name |
 | `dosage` | Dose |
 | `frequency` | Dosing frequency |
 | `duration_days` | Course length (days) |
 | `route` | Route of administration |
+| `med_notes` | Per-medication notes |
 | `ocr_raw` | Raw OCR text |
 
 ---

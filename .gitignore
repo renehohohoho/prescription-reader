@@ -7,6 +7,7 @@ __pycache__/
 .env
 .venv
 venv/
+.pytest_cache/
 
 # Saved models & datasets
 OCR train/saved_models/
@@ -18,10 +19,15 @@ OCR train/result/
 # UniApp build output
 lastone/last_one/unpackage/
 lastone/last_one/node_modules/
+# Compiled app bundles embed whatever config they were built with
+*.apk
+*.ipa
+*.wgt
 
 # Credentials (never commit real keys)
 lastone/last_one/config.js
 lastone/last_one/uniCloud-tcb/cloudfunctions/tencentcloud-plugin/config.js
+lastone/last_one/uniCloud-tcb/cloudfunctions/deepseek-chat/config.js
 
 # OS
 .DS_Store
