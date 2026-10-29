@@ -202,8 +202,8 @@ export default {
 
 .subtitle {
   display: block;
-  font-size: 13px;
-  color: #888;
+  font-size: 14px;
+  color: #5f6368;
   margin-top: 6px;
 }
 
@@ -230,16 +230,24 @@ export default {
   color: #fff;
 }
 
+/* 次要動作：白底藍框，與主按鈕同色系但不搶焦點 */
 .btn-secondary {
-  background-color: #34a853;
-  color: #fff;
+  background-color: #ffffff;
+  color: #1a73e8;
+  border: 1px solid #1a73e8;
 }
 
+/* 清除只是重置畫面，用文字按鈕；紅色留給真正的錯誤 */
 .btn-clear {
-  background-color: #ea4335;
-  color: #fff;
+  background-color: transparent;
+  color: #5f6368;
   font-size: 14px;
   padding: 10px 0;
+}
+
+.btn-clear::after,
+.btn-secondary::after {
+  border: none;
 }
 
 .loading-bar {
@@ -280,14 +288,15 @@ export default {
 }
 
 .ocr-lines {
-  border-left: 3px solid #1a73e8;
-  padding-left: 12px;
+  background-color: #f5f8fd;
+  border-radius: 8px;
+  padding: 10px 12px;
 }
 
 .ocr-line {
   display: block;
-  font-size: 14px;
-  color: #444;
+  font-size: 15px;
+  color: #3c4043;
   line-height: 1.7;
 }
 
